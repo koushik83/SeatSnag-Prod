@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeatSnag Admin - Two-Tier Management</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.title-text h1 {
+  font-size: 2.4em;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.title-text p {
+  color: #64748b;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.user-info {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.user-details h3 {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.user-details p {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* Login Screen Styles */
+.login-screen {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.login-title {
+  font-size: 2.2em;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.login-subtitle {
+  color: #64748b;
+  font-size: 1.1em;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95em;
+}
+
+.form-input, .form-select {
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
+.login-btn {
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+}
+
+.super-admin-link {
+  color: #64748b;
+  font-size: 0.9em;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.super-admin-link:hover {
+  background: #f1f5f9;
+  color: #667eea;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+  font-size: 2.5em;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.stat-number {
+  font-size: 2.2em;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+/* Section Styles */
+.section {
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 40px;
+  border: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.section::before {
+  content: attr(data-icon);
+  position: absolute;
+  top: -12px;
+  left: 32px;
+  background: #fff;
+  padding: 0 12px;
+  font-size: 1.2em;
+}
+
+.section-title {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-subtitle {
+  color: #64748b;
+  margin-bottom: 24px;
+  font-size: 1.05em;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+.company-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.location-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.add-btn {
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.add-btn:active {
+  transform: translateY(0);
+}
+
+/* Cards and Lists */
+.companies-section, .locations-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-input {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 240px;
+}
+
+.companies-grid, .locations-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.company-card, .location-card {
+  background: linear-gradient(135deg, #fefefe 0%, #f9fafb 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.company-card::before, .location-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.company-card:hover, .location-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  border-color: #667eea;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-info h3 {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.card-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9em;
+  color: #64748b;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.edit-btn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.edit-btn:hover {
+  background: #fde68a;
+}
+
+.delete-btn {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.delete-btn:hover {
+  background: #fca5a5;
+}
+
+.trial-status {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 12px;
+  font-size: 0.85em;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.trial-status.expiring {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: #d97706;
+}
+
+.trial-status.expired {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.empty-state-icon {
+  font-size: 4em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.empty-state h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  font-size: 1.1em;
+  color: #64748b;
+}
+
+.loading::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.success-feedback, .error-feedback {
+  padding: 12px 24px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: none;
+  font-weight: 600;
+}
+
+.success-feedback {
+  background: #22c55e;
+  color: white;
+}
+
+.recent-signups-grid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.signup-card {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid #f59e0b;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.signup-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.signup-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+  border-color: #d97706;
+}
+
+.signup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.signup-info h3 {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signup-info h3::before {
+  content: '🆕';
+  font-size: 0.9em;
+}
+
+.signup-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9em;
+  color: #a16207;
+  flex-wrap: wrap;
+}
+
+.signup-actions {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.contact-btn {
+  padding: 8px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.contact-btn:hover {
+  background: #d97706;
+}
+
+.signup-badge {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75em;
+  color: #92400e;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.time-ago {
+  color: #a16207;
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-ago::before {
+  content: '⏰';
+  font-size: 0.9em;
+}
+  .container { padding: 20px; }
+  .header { flex-direction: column; gap: 20px; text-align: center; }
+  .form-grid, .company-form-grid, .location-form-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .section-header { flex-direction: column; gap: 16px; }
+  .filter-input { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div class="login-screen">
+      <div class="logo" style="margin: 0 auto 24px; width: 80px; height: 80px; font-size: 32px;">🏢</div>
+      <h1 class="login-title">SeatSnag Admin</h1>
+      <p class="login-subtitle">Access your company workspace or super admin panel</p>
+      
+      <div class="login-form">
+        <div class="form-group">
+          <label class="form-label">Select Company</label>
+          <select class="form-select" id="loginCompany">
+            <option value="">Choose your company...</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Secret PIN</label>
+          <input type="password" class="form-input" id="loginPin" placeholder="Enter your admin PIN" maxlength="4">
+        </div>
+        
+        <button class="login-btn" onclick="handleLogin()">
+          Company Admin Login
+        </button>
+      </div>
+      
+      <a href="#" class="super-admin-link" onclick="switchToSuperAdmin()">
+        Super Admin Access
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="mainDashboard" style="display: none;">
+    <div class="header">
+      <div class="title-section">
+        <div class="logo">🏢</div>
+        <div class="title-text">
+          <h1>SeatSnag Admin</h1>
+          <p id="dashboardSubtitle">Manage companies and workspace settings</p>
+        </div>
+      </div>
+      <div class="user-info" id="userInfo" style="display: none;">
+        <div class="user-avatar" id="userAvatar">SA</div>
+        <div class="user-details">
+          <h3 id="userName">Super Admin</h3>
+          <p id="userRole">Full Access</p>
+        </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">🏢</span>
+        <div class="stat-number" id="totalCompanies">-</div>
+        <div class="stat-label">Total Companies</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📍</span>
+        <div class="stat-number" id="totalLocations">-</div>
+        <div class="stat-label">Total Locations</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">💺</span>
+        <div class="stat-number" id="totalSeats">-</div>
+        <div class="stat-label">Total Seats</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📊</span>
+        <div class="stat-number" id="activeBookings">-</div>
+        <div class="stat-label">Active Bookings</div>
+      </div>
+    </div>
+    
+    <!-- Super Admin: Company Creation -->
+    <div class="section" data-icon="✨" id="superAdminSection" style="display: none;">
+      <h2 class="section-title">
+        <span>🚀</span>
+        Add New Company
+      </h2>
+      <p class="section-subtitle">
+        Create a new company with admin credentials. The company admin will manage all locations.
+      </p>
+      
+      <div class="success-feedback" id="companySuccess"></div>
+      <div class="error-feedback" id="companyError"></div>
+      
+      <div class="company-form-grid">
+        <div class="input-group">
+          <label class="input-label">Company Name</label>
+          <input type="text" class="form-input" id="companyName" placeholder="e.g. Tech Corp">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Company Code</label>
+          <input type="text" class="form-input" id="companyCode" placeholder="e.g. TECH" maxlength="10" style="text-transform: uppercase;">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Admin First Name</label>
+          <input type="text" class="form-input" id="adminFirstName" placeholder="e.g. Sarah">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Admin Last Name</label>
+          <input type="text" class="form-input" id="adminLastName" placeholder="e.g. Wilson">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Secret PIN</label>
+          <input type="text" class="form-input" id="secretPin" placeholder="4-digit PIN" maxlength="4">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Admin Email</label>
+          <input type="email" class="form-input" id="adminEmail" placeholder="sarah@techcorp.com">
+        </div>
+      </div>
+      
+      <button class="add-btn" onclick="addCompany()">
+        Create Company
+      </button>
+    </div>
+
+    <!-- Super Admin: Recent Signups -->
+    <div class="section" data-icon="🔔" id="recentSignupsSection" style="display: none;">
+      <h2 class="section-title">
+        <span>📈</span>
+        Recent Signups
+      </h2>
+      <p class="section-subtitle">
+        Companies that signed up through the signup form in the last 7 days
+      </p>
+      
+      <div class="recent-signups-grid" id="recentSignupsList">
+        <div class="loading">Loading recent signups...</div>
+      </div>
+    </div>
+
+    <!-- Company Admin: Location Management -->
+    <div class="section" data-icon="📍" id="companyAdminSection" style="display: none;">
+      <h2 class="section-title">
+        <span>🏢</span>
+        Add New Location
+      </h2>
+      <p class="section-subtitle">
+        Add office locations where your employees can book seats
+      </p>
+      
+      <div class="success-feedback" id="locationSuccess"></div>
+      <div class="error-feedback" id="locationError"></div>
+      
+      <div class="location-form-grid">
+        <div class="input-group">
+          <label class="input-label">Location Name</label>
+          <input type="text" class="form-input" id="locationName" placeholder="e.g. HQ San Francisco">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Address</label>
+          <input type="text" class="form-input" id="locationAddress" placeholder="123 Main St, SF">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Employee PIN</label>
+          <input type="text" class="form-input" id="locationPin" placeholder="4-digit PIN" maxlength="4">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Daily Capacity</label>
+          <input type="number" class="form-input" id="locationCapacity" placeholder="e.g. 50" min="1" max="500">
+        </div>
+        <button class="add-btn" onclick="addLocation()">
+          Add Location
+        </button>
+      </div>
+    </div>
+
+    <!-- Companies List -->
+    <div class="companies-section">
+      <div class="section-header">
+        <h2 class="section-header-title">
+          <span>📋</span>
+          <span id="companiesTitle">Company Directory</span>
+        </h2>
+        <input type="text" class="filter-input" placeholder="Search..." id="searchFilter" onkeyup="filterResults()">
+      </div>
+      
+      <div class="companies-grid" id="dataList">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    setDoc,
+    doc,
+    getDocs, 
+    deleteDoc,
+    updateDoc,
+    query, 
+    where, 
+    orderBy,
+    serverTimestamp 
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  // Firebase configuration
+  const firebaseConfig = {
+  apiKey: "AIzaSyD0aKw1vkbjN02dpTP3jGRayVqS127IObs",
+  authDomain: "seatsnag-sso-dev.firebaseapp.com",
+  projectId: "seatsnag-sso-dev",
+  storageBucket: "seatsnag-sso-dev.firebasestorage.app",
+  messagingSenderId: "138133397720",
+  appId: "1:138133397720:web:9fc75b262986e1cf0677ad"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Global variables
+  let companies = [];
+  let locations = [];
+  let bookings = [];
+  let currentUser = null;
+  let userType = null; // 'super_admin' or 'company_admin'
+
+  // ========================================
+  // Authentication & User Management
+  // ========================================
+
+  async function loadCompaniesForLogin() {
+    try {
+      const companiesSnapshot = await getDocs(collection(db, 'companies'));
+      companies = companiesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      const select = document.getElementById('loginCompany');
+      select.innerHTML = '<option value="">Choose your company...</option>';
+      
+      companies.forEach(company => {
+        const option = document.createElement('option');
+        option.value = company.id;
+        option.textContent = company.name;
+        select.appendChild(option);
+      });
+      
+    } catch (error) {
+      console.error('Error loading companies:', error);
+    }
+  }
+
+  window.handleLogin = async function() {
+    const companyId = document.getElementById('loginCompany').value;
+    const pin = document.getElementById('loginPin').value.trim();
+
+    if (!companyId || !pin) {
+      alert('Please select a company and enter your PIN');
+      return;
+    }
+
+    const company = companies.find(c => c.id === companyId);
+    if (!company) {
+      alert('Company not found');
+      return;
+    }
+
+    if (company.secretPin !== pin) {
+      alert('Invalid PIN for this company');
+      return;
+    }
+
+    if (!company.emailVerified) {
+    alert('Please verify your email address before logging in. Check your inbox for the verification link.');
+    return;
+    }
+
+    // Successful login
+    currentUser = company;
+    userType = 'company_admin';
+    
+    showDashboard();
+    await loadAllData();
+  };
+
+  window.switchToSuperAdmin = function() {
+    // For now, just bypass authentication for super admin
+    // In production, you'd want proper super admin authentication
+    currentUser = { name: 'Super Admin', role: 'Super Admin' };
+    userType = 'super_admin';
+    
+    showDashboard();
+    loadAllData();
+  };
+
+  window.logout = function() {
+    currentUser = null;
+    userType = null;
+    
+    // Clear forms
+    document.getElementById('loginCompany').value = '';
+    document.getElementById('loginPin').value = '';
+    
+    // Show login screen
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('mainDashboard').style.display = 'none';
+  };
+
+  function showDashboard() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainDashboard').style.display = 'block';
+    
+    // Update UI based on user type
+    if (userType === 'super_admin') {
+      document.getElementById('dashboardSubtitle').textContent = 'Super Admin - Full System Access';
+      document.getElementById('superAdminSection').style.display = 'block';
+      document.getElementById('recentSignupsSection').style.display = 'block';
+      document.getElementById('companyAdminSection').style.display = 'none';
+      document.getElementById('companiesTitle').textContent = 'All Companies';
+      document.getElementById('userInfo').style.display = 'flex';
+      document.getElementById('userAvatar').textContent = 'SA';
+      document.getElementById('userName').textContent = 'Super Admin';
+      document.getElementById('userRole').textContent = 'Full Access';
+    } else {
+      document.getElementById('dashboardSubtitle').textContent = `Company Admin - ${currentUser.name}`;
+      document.getElementById('superAdminSection').style.display = 'none';
+      document.getElementById('recentSignupsSection').style.display = 'none';
+      document.getElementById('companyAdminSection').style.display = 'block';
+      document.getElementById('companiesTitle').textContent = 'Your Locations';
+      document.getElementById('userInfo').style.display = 'flex';
+      document.getElementById('userAvatar').textContent = (currentUser.adminFirstName?.[0] || 'A').toUpperCase();
+      document.getElementById('userName').textContent = `${currentUser.adminFirstName} ${currentUser.adminLastName}`;
+      document.getElementById('userRole').textContent = currentUser.name;
+    }
+  }
+
+  // ========================================
+  // Firebase Database Functions
+  // ========================================
+
+  async function loadAllData() {
+    try {
+      // Load companies
+      const companiesSnapshot = await getDocs(collection(db, 'companies'));
+      companies = companiesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Load locations
+      let locationsQuery;
+      if (userType === 'company_admin') {
+        // Company admin sees only their locations
+        locationsQuery = query(
+          collection(db, 'locations'),
+          where('companyId', '==', currentUser.id)
+        );
+      } else {
+        // Super admin sees all locations
+        locationsQuery = collection(db, 'locations');
+      }
+      
+      const locationsSnapshot = await getDocs(locationsQuery);
+      locations = locationsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Load today's bookings for stats
+      const today = new Date().toISOString().split('T')[0];
+      let bookingsQuery;
+      if (userType === 'company_admin') {
+        // Company admin sees only bookings for their locations
+        const companyLocationIds = locations.map(loc => loc.id);
+        if (companyLocationIds.length > 0) {
+          bookingsQuery = query(
+            collection(db, 'bookings'),
+            where('locationId', 'in', companyLocationIds),
+            where('bookingDate', '==', today),
+            where('status', '==', 'active')
+          );
+        } else {
+          bookings = [];
+          renderData();
+          updateStats();
+          return;
+        }
+      } else {
+        // Super admin sees all bookings
+        bookingsQuery = query(
+          collection(db, 'bookings'),
+          where('bookingDate', '==', today),
+          where('status', '==', 'active')
+        );
+      }
+      
+      const bookingsSnapshot = await getDocs(bookingsQuery);
+      bookings = bookingsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      renderData();
+      updateStats();
+      
+      // Load recent signups for super admin
+      if (userType === 'super_admin') {
+        await loadRecentSignups();
+      }
+      
+    } catch (error) {
+      console.error('Error loading data:', error);
+      showError('Failed to load data. Please refresh and try again.');
+    }
+  }
+
+  async function loadRecentSignups() {
+    try {
+      // Get companies created in the last 7 days
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      
+      // Filter companies created in last 7 days
+      const recentSignups = companies.filter(company => {
+        const createdAt = company.createdAt?.toDate ? company.createdAt.toDate() : new Date(company.createdAt);
+        return createdAt >= sevenDaysAgo;
+      });
+
+      // Sort by creation date (newest first)
+      recentSignups.sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+        return dateB - dateA;
+      });
+
+      renderRecentSignups(recentSignups);
+      
+    } catch (error) {
+      console.error('Error loading recent signups:', error);
+    }
+  }
+
+  function renderRecentSignups(signups) {
+    const list = document.getElementById('recentSignupsList');
+    
+    if (signups.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <span class="empty-state-icon">📝</span>
+          <h3>No Recent Signups</h3>
+          <p>No new companies have signed up in the last 7 days.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    list.innerHTML = signups.map(company => {
+      const createdAt = company.createdAt?.toDate ? company.createdAt.toDate() : new Date(company.createdAt);
+      const timeAgo = getTimeAgo(createdAt);
+      const companyLocations = locations.filter(loc => loc.companyId === company.id);
+      const hasSetupLocations = companyLocations.length > 0;
+      
+      return `
+        <div class="signup-card">
+          <div class="signup-header">
+            <div class="signup-info">
+              <h3>${company.name} (${company.companyCode})</h3>
+              <div class="signup-meta">
+                <span class="meta-item">
+                  <span>👨‍💼</span>
+                  ${company.adminFirstName} ${company.adminLastName}
+                </span>
+                <span class="meta-item">
+                  <span>📧</span>
+                  ${company.adminEmail}
+                </span>
+                <span class="meta-item">
+                  <span>🔑</span>
+                  PIN: ${company.secretPin}
+                </span>
+                <span class="meta-item">
+                  <span>📍</span>
+                  ${companyLocations.length} location${companyLocations.length !== 1 ? 's' : ''}
+                </span>
+              </div>
+              <div class="time-ago">
+                Signed up ${timeAgo}
+              </div>
+            </div>
+            <div class="signup-actions">
+              <span class="signup-badge ${hasSetupLocations ? 'active' : 'pending'}">
+                ${hasSetupLocations ? 'Setup Complete' : 'Pending Setup'}
+              </span>
+              <a href="mailto:${company.adminEmail}?subject=Welcome to SeatSnag&body=Hi ${company.adminFirstName},%0A%0AWelcome to SeatSnag! Your workspace is ready:%0A%0ACompany: ${company.name}%0APIN: ${company.secretPin}%0AAdmin Portal: ${window.location.origin}/admin.html%0A%0ABest regards" 
+                 class="contact-btn">
+                Email Admin
+              </a>
+              <button class="action-btn delete-btn" onclick="deleteCompany('${company.id}', '${company.name}')" style="font-size: 10px; padding: 6px 8px;">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function getTimeAgo(date) {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) {
+      return 'just now';
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} day${days !== 1 ? 's' : ''} ago`;
+    }
+  }
+
+  async function createCompany(name, code, firstName, lastName, pin, email) {
+    try {
+      const companyRef = await addDoc(collection(db, 'companies'), {
+        name: name,
+        companyCode: code.toUpperCase(),
+        adminFirstName: firstName,
+        adminLastName: lastName,
+        adminEmail: email,
+        secretPin: pin,
+        isActive: true,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      // Create trial record
+      await setDoc(doc(db, 'trials', companyRef.id), {
+        companyId: companyRef.id,
+        contactEmail: email,
+        teamSize: 'unknown',
+        isActive: true,
+        startDate: serverTimestamp(),
+        endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
+        createdAt: serverTimestamp()
+      });
+
+      // Log analytics event
+      await addDoc(collection(db, 'analyticsEvents'), {
+        companyId: companyRef.id,
+        eventType: 'company_created',
+        eventData: { 
+          companyName: name,
+          companyCode: code.toUpperCase(),
+          adminName: `${firstName} ${lastName}`,
+          source: 'super_admin'
+        },
+        createdAt: serverTimestamp()
+      });
+
+      return companyRef.id;
+    } catch (error) {
+      console.error('Error creating company:', error);
+      throw error;
+    }
+  }
+
+  async function createLocation(companyId, name, address, pin, capacity) {
+    try {
+      const locationRef = await addDoc(collection(db, 'locations'), {
+        companyId: companyId,
+        name: name,
+        address: address || '',
+        pin: pin,
+        capacity: parseInt(capacity),
+        timezone: 'America/Los_Angeles', // Default timezone
+        isActive: true,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      // Create default location settings
+      await setDoc(doc(db, 'locationSettings', locationRef.id), {
+        locationId: locationRef.id,
+        bookingWindowDays: 30,
+        maxBookingsPerUser: 5,
+        allowWeekendBookings: false,
+        notificationSettings: {
+          emailReminders: true,
+          slackIntegration: false,
+          reminderHours: 24
+        },
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      // Log analytics event
+      await addDoc(collection(db, 'analyticsEvents'), {
+        companyId: companyId,
+        locationId: locationRef.id,
+        eventType: 'location_created',
+        eventData: { 
+          locationName: name,
+          capacity: parseInt(capacity),
+          source: userType === 'super_admin' ? 'super_admin' : 'company_admin'
+        },
+        createdAt: serverTimestamp()
+      });
+
+      return locationRef.id;
+    } catch (error) {
+      console.error('Error creating location:', error);
+      throw error;
+    }
+  }
+
+  async function deleteCompanyById(companyId) {
+    try {
+      // Get all locations for this company
+      const companyLocations = locations.filter(l => l.companyId === companyId);
+      
+      // Delete all bookings for each location
+      for (const location of companyLocations) {
+        const bookingsQuery = query(
+          collection(db, 'bookings'),
+          where('locationId', '==', location.id)
+        );
+        const bookingsSnapshot = await getDocs(bookingsQuery);
+        
+        for (const bookingDoc of bookingsSnapshot.docs) {
+          await deleteDoc(doc(db, 'bookings', bookingDoc.id));
+        }
+
+        // Delete location settings
+        try {
+          await deleteDoc(doc(db, 'locationSettings', location.id));
+        } catch (e) {
+          console.log('No settings found for location:', location.id);
+        }
+        
+        // Delete location
+        await deleteDoc(doc(db, 'locations', location.id));
+      }
+
+      // Delete trial and subscription records
+      try {
+        await deleteDoc(doc(db, 'trials', companyId));
+        await deleteDoc(doc(db, 'subscriptions', companyId));
+      } catch (e) {
+        console.log('No trial/subscription found for company:', companyId);
+      }
+
+      // Delete company
+      await deleteDoc(doc(db, 'companies', companyId));
+
+      // Log analytics event
+      await addDoc(collection(db, 'analyticsEvents'), {
+        companyId: companyId,
+        eventType: 'company_deleted',
+        eventData: { 
+          locationsDeleted: companyLocations.length,
+          source: 'super_admin'
+        },
+        createdAt: serverTimestamp()
+      });
+
+    } catch (error) {
+      console.error('Error deleting company:', error);
+      throw error;
+    }
+  }
+
+  async function deleteLocationById(locationId) {
+    try {
+      // Delete all bookings for this location
+      const bookingsQuery = query(
+        collection(db, 'bookings'),
+        where('locationId', '==', locationId)
+      );
+      const bookingsSnapshot = await getDocs(bookingsQuery);
+      
+      for (const bookingDoc of bookingsSnapshot.docs) {
+        await deleteDoc(doc(db, 'bookings', bookingDoc.id));
+      }
+
+      // Delete location settings
+      try {
+        await deleteDoc(doc(db, 'locationSettings', locationId));
+      } catch (e) {
+        console.log('No settings found for location:', locationId);
+      }
+      
+      // Delete location
+      await deleteDoc(doc(db, 'locations', locationId));
+
+      // Log analytics event
+      const location = locations.find(l => l.id === locationId);
+      if (location) {
+        await addDoc(collection(db, 'analyticsEvents'), {
+          companyId: location.companyId,
+          locationId: locationId,
+          eventType: 'location_deleted',
+          eventData: { 
+            locationName: location.name,
+            source: userType === 'super_admin' ? 'super_admin' : 'company_admin'
+          },
+          createdAt: serverTimestamp()
+        });
+      }
+
+    } catch (error) {
+      console.error('Error deleting location:', error);
+      throw error;
+    }
+  }
+
+  // ========================================
+  // UI Functions
+  // ========================================
+
+  function showSuccess(message, elementId) {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.style.display = 'block';
+    setTimeout(() => {
+      element.style.display = 'none';
+    }, 5000);
+  }
+
+  function showError(message, elementId = 'companyError') {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.style.display = 'block';
+    setTimeout(() => {
+      element.style.display = 'none';
+    }, 8000);
+  }
+
+  function updateStats() {
+    let totalCompanies, totalLocations, totalSeats, activeBookings;
+
+    if (userType === 'company_admin') {
+      totalCompanies = 1; // Just their company
+      totalLocations = locations.length;
+      totalSeats = locations.reduce((sum, loc) => sum + (loc.capacity || 0), 0);
+      activeBookings = bookings.length;
+    } else {
+      totalCompanies = companies.length;
+      totalLocations = locations.length;
+      totalSeats = locations.reduce((sum, loc) => sum + (loc.capacity || 0), 0);
+      activeBookings = bookings.length;
+    }
+
+    document.getElementById('totalCompanies').textContent = totalCompanies;
+    document.getElementById('totalLocations').textContent = totalLocations;
+    document.getElementById('totalSeats').textContent = totalSeats;
+    document.getElementById('activeBookings').textContent = activeBookings;
+  }
+
+  function getTrialStatus(company) {
+    // Mock trial status - in real app, you'd fetch from trials collection
+    const now = new Date();
+    const created = company.createdAt?.toDate ? company.createdAt.toDate() : new Date(company.createdAt);
+    const daysSinceCreation = Math.floor((now - created) / (1000 * 60 * 60 * 24));
+    
+    if (daysSinceCreation > 14) {
+      return { status: 'expired', text: 'Trial Expired', class: 'expired' };
+    } else if (daysSinceCreation > 11) {
+      return { status: 'expiring', text: `${14 - daysSinceCreation} days left`, class: 'expiring' };
+    } else {
+      return { status: 'active', text: `${14 - daysSinceCreation} days left`, class: 'active' };
+    }
+  }
+
+  function renderData() {
+    const dataList = document.getElementById('dataList');
+    
+    if (userType === 'super_admin') {
+      renderCompanies();
+    } else {
+      renderLocations();
+    }
+  }
+
+  function renderCompanies() {
+    const list = document.getElementById('dataList');
+    
+    if (companies.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <span class="empty-state-icon">🏢</span>
+          <h3>No Companies Yet</h3>
+          <p>Add your first company to get started with SeatSnag workspace management.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    list.innerHTML = companies.map(company => {
+      const companyLocations = locations.filter(loc => loc.companyId === company.id);
+      const totalCapacity = companyLocations.reduce((sum, loc) => sum + (loc.capacity || 0), 0);
+      const totalBookings = bookings.filter(booking => 
+        companyLocations.some(loc => loc.id === booking.locationId)
+      ).length;
+      const trial = getTrialStatus(company);
+      
+      return `
+        <div class="company-card" data-name="${company.name.toLowerCase()}">
+          <div class="card-header">
+            <div class="card-info">
+              <h3>${company.name} (${company.companyCode})</h3>
+              <div class="card-meta">
+                <span class="meta-item">
+                  <span>👨‍💼</span>
+                  ${company.adminFirstName} ${company.adminLastName}
+                </span>
+                <span class="meta-item">
+                  <span>📧</span>
+                  ${company.adminEmail}
+                </span>
+                <span class="meta-item">
+                  <span>🔑</span>
+                  PIN: ${company.secretPin}
+                </span>
+                <span class="meta-item">
+                  <span>📍</span>
+                  ${companyLocations.length} location${companyLocations.length !== 1 ? 's' : ''}
+                </span>
+                <span class="meta-item">
+                  <span>💺</span>
+                  ${totalCapacity} total seats
+                </span>
+                <span class="meta-item">
+                  <span>📊</span>
+                  ${totalBookings} bookings today
+                </span>
+              </div>
+              <div class="trial-status ${trial.class}">
+                🕒 ${trial.text}
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="action-btn delete-btn" onclick="deleteCompany('${company.id}', '${company.name}')">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderLocations() {
+    const list = document.getElementById('dataList');
+    
+    if (locations.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <span class="empty-state-icon">📍</span>
+          <h3>No Locations Yet</h3>
+          <p>Add your first office location to start managing seat bookings.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    list.innerHTML = locations.map(location => {
+      const locationBookings = bookings.filter(b => b.locationId === location.id);
+      const utilizationRate = location.capacity > 0 ? Math.round((locationBookings.length / location.capacity) * 100) : 0;
+      
+      return `
+        <div class="location-card" data-name="${location.name.toLowerCase()}">
+          <div class="card-header">
+            <div class="card-info">
+              <h3>${location.name}</h3>
+              <div class="card-meta">
+                <span class="meta-item">
+                  <span>📍</span>
+                  ${location.address || 'No address set'}
+                </span>
+                <span class="meta-item">
+                  <span>🔑</span>
+                  Employee PIN: ${location.pin}
+                </span>
+                <span class="meta-item">
+                  <span>💺</span>
+                  ${location.capacity} seats/day
+                </span>
+                <span class="meta-item">
+                  <span>📊</span>
+                  ${locationBookings.length} bookings today
+                </span>
+                <span class="meta-item">
+                  <span>📈</span>
+                  ${utilizationRate}% utilization
+                </span>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="action-btn delete-btn" onclick="deleteLocation('${location.id}', '${location.name}')">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function filterResults() {
+    const query = document.getElementById('searchFilter').value.toLowerCase();
+    const cards = document.querySelectorAll('.company-card, .location-card');
+    
+    cards.forEach(card => {
+      const name = card.dataset.name;
+      if (name.includes(query)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // ========================================
+  // Global Functions (for onclick handlers)
+  // ========================================
+
+  window.addCompany = async function() {
+    const name = document.getElementById('companyName').value.trim();
+    const code = document.getElementById('companyCode').value.trim();
+    const firstName = document.getElementById('adminFirstName').value.trim();
+    const lastName = document.getElementById('adminLastName').value.trim();
+    const pin = document.getElementById('secretPin').value.trim();
+    const email = document.getElementById('adminEmail').value.trim();
+
+    if (!name || !code || !firstName || !lastName || !pin || !email) {
+      showError('Please fill in all company fields', 'companyError');
+      return;
+    }
+
+    if (code.length < 2 || code.length > 10) {
+      showError('Company code must be 2-10 characters', 'companyError');
+      return;
+    }
+
+    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+      showError('Secret PIN must be exactly 4 digits', 'companyError');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      showError('Please enter a valid email address', 'companyError');
+      return;
+    }
+
+    // Check for duplicate company names or codes
+    if (companies.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+      showError('A company with this name already exists', 'companyError');
+      return;
+    }
+
+    if (companies.some(c => c.companyCode === code.toUpperCase())) {
+      showError('A company with this code already exists', 'companyError');
+      return;
+    }
+
+    if (companies.some(c => c.secretPin === pin)) {
+      showError('This PIN is already in use by another company', 'companyError');
+      return;
+    }
+
+    try {
+      const companyId = await createCompany(name, code, firstName, lastName, pin, email);
+      
+      // Clear form
+      document.getElementById('companyName').value = '';
+      document.getElementById('companyCode').value = '';
+      document.getElementById('adminFirstName').value = '';
+      document.getElementById('adminLastName').value = '';
+      document.getElementById('secretPin').value = '';
+      document.getElementById('adminEmail').value = '';
+      
+      // Reload data and show success
+      await loadAllData();
+      showSuccess(`Company "${name}" created successfully! Send credentials to ${firstName}.`, 'companySuccess');
+      
+    } catch (error) {
+      console.error('Error adding company:', error);
+      showError('Failed to create company. Please try again.', 'companyError');
+    }
+  };
+
+  window.addLocation = async function() {
+    const name = document.getElementById('locationName').value.trim();
+    const address = document.getElementById('locationAddress').value.trim();
+    const pin = document.getElementById('locationPin').value.trim();
+    const capacity = document.getElementById('locationCapacity').value.trim();
+
+    if (!name || !pin || !capacity) {
+      showError('Please fill in location name, PIN, and capacity', 'locationError');
+      return;
+    }
+
+    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+      showError('Employee PIN must be exactly 4 digits', 'locationError');
+      return;
+    }
+
+    const capacityNum = parseInt(capacity);
+    if (capacityNum < 1 || capacityNum > 500) {
+      showError('Capacity must be between 1 and 500 seats', 'locationError');
+      return;
+    }
+
+    // Check for duplicate PINs within the same company
+    const existingLocation = locations.find(l => 
+      l.companyId === currentUser.id && l.pin === pin
+    );
+    if (existingLocation) {
+      showError('You already have a location with this PIN', 'locationError');
+      return;
+    }
+
+    try {
+      const locationId = await createLocation(currentUser.id, name, address, pin, capacityNum);
+      
+      // Clear form
+      document.getElementById('locationName').value = '';
+      document.getElementById('locationAddress').value = '';
+      document.getElementById('locationPin').value = '';
+      document.getElementById('locationCapacity').value = '';
+      
+      // Reload data and show success
+      await loadAllData();
+      showSuccess(`Location "${name}" created successfully! Employees can use PIN: ${pin}`, 'locationSuccess');
+      
+    } catch (error) {
+      console.error('Error adding location:', error);
+      showError('Failed to create location. Please try again.', 'locationError');
+    }
+  };
+
+  window.deleteCompany = async function(companyId, companyName) {
+    if (userType !== 'super_admin') {
+      alert('Only super admins can delete companies');
+      return;
+    }
+
+    const companyLocations = locations.filter(l => l.companyId === companyId);
+    const totalBookings = bookings.filter(booking => 
+      companyLocations.some(loc => loc.id === booking.locationId)
+    ).length;
+    
+    let confirmMessage = `Are you sure you want to delete "${companyName}"?`;
+    if (companyLocations.length > 0) {
+      confirmMessage += `\n\nThis will also delete:`;
+      confirmMessage += `\n• ${companyLocations.length} location${companyLocations.length !== 1 ? 's' : ''}`;
+      if (totalBookings > 0) {
+        confirmMessage += `\n• ${totalBookings} active booking${totalBookings !== 1 ? 's' : ''}`;
+      }
+      confirmMessage += `\n\nThis action cannot be undone.`;
+    }
+    
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+    
+    try {
+      await deleteCompanyById(companyId);
+      await loadAllData();
+      showSuccess(`Company "${companyName}" and all associated data deleted successfully!`, 'companySuccess');
+    } catch (error) {
+      console.error('Error deleting company:', error);
+      showError('Failed to delete company. Please try again.', 'companyError');
+    }
+  };
+
+  window.deleteLocation = async function(locationId, locationName) {
+    const locationBookings = bookings.filter(b => b.locationId === locationId);
+    
+    let confirmMessage = `Are you sure you want to delete location "${locationName}"?`;
+    if (locationBookings.length > 0) {
+      confirmMessage += `\n\nThis will also delete ${locationBookings.length} active booking${locationBookings.length !== 1 ? 's' : ''}.`;
+      confirmMessage += `\n\nThis action cannot be undone.`;
+    }
+    
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+    
+    try {
+      await deleteLocationById(locationId);
+      await loadAllData();
+      showSuccess(`Location "${locationName}" deleted successfully!`, 'locationSuccess');
+      
+    } catch (error) {
+      console.error('Error deleting location:', error);
+      showError('Failed to delete location. Please try again.', 'locationError');
+    }
+  };
+
+  // ========================================
+  // Initialize Application
+  // ========================================
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🔄 Loading SeatSnag Admin Panel...');
+    await loadCompaniesForLogin();
+    console.log('✅ Login ready');
+  });
+
+</script>
+</body>
+</html>

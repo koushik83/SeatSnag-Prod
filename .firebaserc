@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "seatsnag-prod-2025",
+    "dev": "seatsnag-sso-dev"
+  },
+  "targets": {},
+  "etags": {}
+}
