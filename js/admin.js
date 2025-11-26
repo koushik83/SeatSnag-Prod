@@ -1693,7 +1693,7 @@ window.logout = async function() {
     }
   }
 
- async function createLocation(companyId, name, address, accessCode, pin, capacity) {
+ async function createLocation(companyId, name, address, accessCode, pin, capacity, monthlyRental) {
   try {
     const locationRef = await addDoc(collection(db, 'locations'), {
       companyId: companyId,
@@ -1702,6 +1702,7 @@ window.logout = async function() {
       accessCode: accessCode.toUpperCase(), // NEW: Access code
       pin: pin || null, // Legacy PIN (optional, for backward compatibility)
       capacity: parseInt(capacity),
+      monthlyRental: parseFloat(monthlyRental) || 0,
       timezone: 'America/Los_Angeles',
       isActive: true,
       createdAt: serverTimestamp(),
@@ -1728,9 +1729,10 @@ window.logout = async function() {
       companyId: companyId,
       locationId: locationRef.id,
       eventType: 'location_created',
-      eventData: { 
+      eventData: {
         locationName: name,
         capacity: parseInt(capacity),
+        monthlyRental: parseFloat(monthlyRental) || 0,
         accessCode: accessCode.toUpperCase(),
         hasLegacyPin: !!pin,
         source: userType === 'super_admin' ? 'super_admin' : 'company_admin'
@@ -2132,6 +2134,10 @@ window.logout = async function() {
                     ${location.capacity} seats/day
                   </span>
                   <span class="meta-item">
+                    <span>💰</span>
+                    $${(location.monthlyRental || 0).toLocaleString()}/month
+                  </span>
+                  <span class="meta-item">
                     <span>📊</span>
                     ${locationBookings.length} bookings today
                   </span>
@@ -2240,6 +2246,7 @@ window.logout = async function() {
   const accessCode = document.getElementById('locationAccessCode').value.trim();
   const pin = document.getElementById('locationPin').value.trim();
   const capacity = document.getElementById('locationCapacity').value.trim();
+  const monthlyRental = parseFloat(document.getElementById('locationMonthlyRental').value) || 0;
 
   // Validation: Required fields
   if (!name || !accessCode || !capacity) {
@@ -2295,12 +2302,13 @@ window.logout = async function() {
     console.log('✅ Creating location with access code:', accessCode.toUpperCase());
     
     const locationId = await createLocation(
-      currentUser.id, 
-      name, 
-      address, 
-      accessCode, 
-      pin, 
-      capacityNum
+      currentUser.id,
+      name,
+      address,
+      accessCode,
+      pin,
+      capacityNum,
+      monthlyRental
     );
     
     // Clear form
@@ -2309,6 +2317,7 @@ window.logout = async function() {
     document.getElementById('locationAccessCode').value = '';
     document.getElementById('locationPin').value = '';
     document.getElementById('locationCapacity').value = '';
+    document.getElementById('locationMonthlyRental').value = '';
     
     await loadAllData();
     

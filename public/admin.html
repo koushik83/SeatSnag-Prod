@@ -298,8 +298,8 @@
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; margin-bottom: 30px;">
-          
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start; margin-bottom: 30px;">
+
           <div class="input-group">
             <label class="input-label">Employee PIN (Optional)</label>
             <input type="text" class="form-input" id="locationPin" placeholder="Legacy 4-digit PIN" maxlength="4">
@@ -307,10 +307,18 @@
               ⚠️ Optional - For backward compatibility only
             </small>
           </div>
-          
+
           <div class="input-group">
             <label class="input-label">Daily Capacity</label>
             <input type="number" class="form-input" id="locationCapacity" placeholder="e.g. 50" min="1" max="500">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Monthly Rental ($)</label>
+            <input type="number" class="form-input" id="locationMonthlyRental" placeholder="e.g. 5000" min="0" step="100">
+            <small style="color: #64748b; font-size: 0.85em; margin-top: 4px; display: block;">
+              💰 Used for cost analytics
+            </small>
           </div>
         </div>
         
