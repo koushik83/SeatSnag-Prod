@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade Your Plan - SeatSnag</title>
+
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/payment.css">
+</head>
+<body>
+  <div class="payment-container">
+    <!-- Header Section -->
+    <div class="payment-header">
+      <a href="admin.html" class="back-link">← Back to Admin</a>
+      <div class="logo-section">
+        <div class="logo-icon">🚀</div>
+        <h1 class="logo-text">SeatSnag</h1>
+      </div>
+    </div>
+
+    <!-- Company & Trial Info -->
+    <div class="company-info-section">
+      <div class="company-card">
+        <div class="info-row">
+          <span class="info-label">Company:</span>
+          <span class="info-value" id="companyName">Loading...</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Admin:</span>
+          <span class="info-value" id="adminName">Loading...</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Trial Status:</span>
+          <span class="info-value trial-status" id="trialStatus">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing Plans Section -->
+    <div class="pricing-section">
+      <h2 class="section-title">Choose Your Plan</h2>
+      <p class="section-subtitle">Select the plan that best fits your office needs</p>
+
+      <div class="plans-grid">
+        <!-- Starter Plan -->
+        <div class="plan-card" data-plan="starter">
+          <div class="plan-header">
+            <h3 class="plan-name">Starter</h3>
+            <div class="plan-price">
+              <span class="currency">$</span>
+              <span class="amount">9</span>
+              <span class="period">/month</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="feature-icon">✓</span> Up to 15 seats per day</li>
+            <li><span class="feature-icon">✓</span> Basic booking features</li>
+            <li><span class="feature-icon">✓</span> Email support</li>
+            <li><span class="feature-icon">✓</span> 1 office location</li>
+            <li><span class="feature-icon">✓</span> Simple analytics</li>
+          </ul>
+          <button class="select-plan-btn" onclick="selectPlan('starter', 9)">
+            Select Starter
+          </button>
+        </div>
+
+        <!-- Professional Plan (Most Popular) -->
+        <div class="plan-card featured" data-plan="professional">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-header">
+            <h3 class="plan-name">Professional</h3>
+            <div class="plan-price">
+              <span class="currency">$</span>
+              <span class="amount">29</span>
+              <span class="period">/month</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="feature-icon">✓</span> Up to 50 seats per day</li>
+            <li><span class="feature-icon">✓</span> Advanced analytics & reports</li>
+            <li><span class="feature-icon">✓</span> Priority support</li>
+            <li><span class="feature-icon">✓</span> 3 office locations</li>
+            <li><span class="feature-icon">✓</span> Custom access codes</li>
+            <li><span class="feature-icon">✓</span> Export data</li>
+          </ul>
+          <button class="select-plan-btn" onclick="selectPlan('professional', 29)">
+            Select Professional
+          </button>
+        </div>
+
+        <!-- Business Plan -->
+        <div class="plan-card" data-plan="business">
+          <div class="plan-header">
+            <h3 class="plan-name">Business</h3>
+            <div class="plan-price">
+              <span class="currency">$</span>
+              <span class="amount">49</span>
+              <span class="period">/month</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="feature-icon">✓</span> Up to 150 seats per day</li>
+            <li><span class="feature-icon">✓</span> Custom analytics dashboard</li>
+            <li><span class="feature-icon">✓</span> Phone & chat support</li>
+            <li><span class="feature-icon">✓</span> Unlimited office locations</li>
+            <li><span class="feature-icon">✓</span> API access</li>
+            <li><span class="feature-icon">✓</span> White-label options</li>
+          </ul>
+          <button class="select-plan-btn" onclick="selectPlan('business', 49)">
+            Select Business
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected Plan Summary -->
+    <div class="checkout-section" id="checkoutSection" style="display: none;">
+      <div class="checkout-card">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Plan:</span>
+          <span id="selectedPlanName">-</span>
+        </div>
+        <div class="summary-row">
+          <span>Price:</span>
+          <span id="selectedPlanPrice">-</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total (monthly):</span>
+          <span id="totalPrice">-</span>
+        </div>
+
+        <button class="checkout-btn" id="checkoutBtn">
+          <span id="checkoutBtnText">Continue to Payment</span>
+          <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+        </button>
+
+        <p class="security-note">🔒 Secure payment powered by Stripe</p>
+      </div>
+    </div>
+
+    <!-- Success Message (hidden by default) -->
+    <div class="success-message" id="successMessage" style="display: none;">
+      <div class="success-icon">✓</div>
+      <h2>Payment Integration Coming Soon!</h2>
+      <p>We're currently setting up Stripe integration. You'll be notified when payment processing is available.</p>
+      <a href="admin.html" class="back-btn">Return to Admin Panel</a>
+    </div>
+
+    <!-- Error Message (hidden by default) -->
+    <div class="error-message" id="errorMessage" style="display: none;">
+      <div class="error-icon">✗</div>
+      <h2>Something went wrong</h2>
+      <p id="errorText">Please try again or contact support.</p>
+      <button class="retry-btn" onclick="location.reload()">Try Again</button>
+    </div>
+  </div>
+
+  <script type="module" src="../js/payment.js"></script>
+</body>
+</html>

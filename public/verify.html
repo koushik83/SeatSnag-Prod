@@ -1,228 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verify Your Email - SeatSnag</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.verify-container {
-  background: white;
-  border-radius: 24px;
-  padding: 48px;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  position: relative;
-}
-
-.verify-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
-  border-radius: 24px 24px 0 0;
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  text-decoration: none;
-}
-
-.logo-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-}
-
-.logo-text {
-  font-size: 1.8em;
-  font-weight: 800;
-  color: #1e293b;
-}
-
-.verify-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  margin: 0 auto 24px;
-  box-shadow: 0 16px 40px rgba(245, 158, 11, 0.3);
-}
-
-.verify-title {
-  font-size: 1.8em;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 16px;
-}
-
-.verify-message {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 32px;
-  font-size: 1.1em;
-}
-
-.loading-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid #e5e7eb;
-  border-top: 3px solid #667eea;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.success-state {
-  display: none;
-}
-
-.success-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  margin: 0 auto 24px;
-  box-shadow: 0 16px 40px rgba(34, 197, 94, 0.3);
-}
-
-.success-details {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border: 2px solid #0284c7;
-  border-radius: 16px;
-  padding: 24px;
-  margin: 24px 0;
-  text-align: left;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(2, 132, 199, 0.2);
-}
-
-.detail-item:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  color: #0369a1;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.detail-value {
-  color: #0c4a6e;
-  font-weight: 700;
-  font-family: 'Monaco', monospace;
-}
-
-.access-btn {
-  padding: 16px 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  text-decoration: none;
-  border-radius: 12px;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-  margin: 8px;
-}
-
-.access-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-}
-
-.error-state {
-  display: none;
-}
-
-.error-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  margin: 0 auto 24px;
-  box-shadow: 0 16px 40px rgba(239, 68, 68, 0.3);
-}
-
-.retry-btn {
-  padding: 12px 24px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  margin: 8px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Email - SeatSnag</title>
+  
+  <!-- External CSS -->
+   <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/verify.css">
 </head>
 <body>
   <div class="verify-container">
@@ -259,10 +44,10 @@ body {
         </div>
         <div class="detail-item">
           <span class="detail-label">
-            <span>🔑</span>
-            Admin PIN:
+            <span>📧</span>
+            Login Email:
           </span>
-          <span class="detail-value" id="adminPin">-</span>
+          <span class="detail-value" id="adminEmail">-</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">
@@ -273,9 +58,16 @@ body {
         </div>
       </div>
 
+      <div style="background: #e0f2fe; padding: 16px; border-radius: 8px; margin: 20px 0; text-align: left;">
+        <h4 style="color: #0369a1; margin-bottom: 8px;">🔐 Login Instructions</h4>
+        <p style="color: #0c4a6e; margin: 8px 0; font-size: 0.95em;">
+          Use your <strong>email address</strong> and the <strong>password you created during signup</strong> to access the admin panel.
+        </p>
+      </div>
+
       <div>
-        <a href="/admin" class="access-btn">Access Admin Panel →</a>
-        <a href="/app" class="access-btn" style="background: #f8fafc; color: #667eea; border: 2px solid #667eea;">Employee Portal</a>
+        <a href="/admin.html" class="access-btn">Access Admin Panel →</a>
+        <a href="/booking.html" class="access-btn" style="background: #f8fafc; color: #667eea; border: 2px solid #667eea;">Employee Portal</a>
       </div>
     </div>
 
@@ -285,220 +77,13 @@ body {
       <h1 class="verify-title">Verification Failed</h1>
       <p class="verify-message" id="errorMessage">The verification link is invalid or has expired.</p>
       <div>
-        <a href="/signup" class="access-btn">Sign Up Again</a>
+        <a href="/signup.html" class="access-btn">Sign Up Again</a>
         <button class="retry-btn" onclick="retryVerification()">Retry</button>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { 
-      getFirestore, 
-      doc, 
-      getDoc, 
-      updateDoc, 
-      setDoc,
-      addDoc,
-      collection,
-      serverTimestamp 
-    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0aKw1vkbjN02dpTP3jGRayVqS127IObs",
-      authDomain: "seatsnag-sso-dev.firebaseapp.com",
-      projectId: "seatsnag-sso-dev",
-      storageBucket: "seatsnag-sso-dev.firebasestorage.app",
-      messagingSenderId: "138133397720",
-      appId: "1:138133397720:web:9fc75b262986e1cf0677ad"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Get URL parameters
-    function getUrlParams() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return {
-        token: urlParams.get('token'),
-        company: urlParams.get('company')
-      };
-    }
-
-    // Verify email and activate trial
-    async function verifyEmail() {
-      const params = getUrlParams();
-      
-      if (!params.token || !params.company) {
-        showError('Invalid verification link. Missing required parameters.');
-        return;
-      }
-
-      try {
-        console.log('🔍 Verifying token:', params.token, 'for company:', params.company);
-
-        // Get company document
-        const companyDoc = await getDoc(doc(db, 'companies', params.company));
-        
-        if (!companyDoc.exists()) {
-          showError('Company not found. The verification link may be invalid.');
-          return;
-        }
-
-        const companyData = companyDoc.data();
-        
-        // Check if already verified
-        if (companyData.emailVerified) {
-          showError('This email has already been verified. You can log in to your admin panel.');
-          return;
-        }
-
-        // Verify token
-        if (companyData.verificationToken !== params.token) {
-          showError('Invalid verification token. The link may have expired or been tampered with.');
-          return;
-        }
-
-        // Activate the company and start trial
-        const trialEndDate = new Date();
-        trialEndDate.setDate(trialEndDate.getDate() + 14);
-
-        await updateDoc(doc(db, 'companies', params.company), {
-          emailVerified: true,
-          verificationToken: null, // Remove token after use
-          trialStatus: 'active',
-          trialStartDate: serverTimestamp(),
-          trialEndDate: trialEndDate,
-          isActive: true,
-          updatedAt: serverTimestamp()
-        });
-
-        // Create trial record
-        await setDoc(doc(db, 'trials', params.company), {
-          companyId: params.company,
-          contactEmail: companyData.adminEmail,
-          teamSize: companyData.teamSize || 'unknown',
-          isActive: true,
-          startDate: serverTimestamp(),
-          endDate: trialEndDate,
-          createdAt: serverTimestamp()
-        });
-
-        // Create subscription record
-        await setDoc(doc(db, 'subscriptions', params.company), {
-          companyId: params.company,
-          planType: 'trial',
-          status: 'active',
-          stripeCustomerId: null,
-          stripeSubscriptionId: null,
-          currentPeriodStart: serverTimestamp(),
-          currentPeriodEnd: trialEndDate,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        });
-
-        // Log analytics event
-        await addDoc(collection(db, 'analyticsEvents'), {
-          companyId: params.company,
-          eventType: 'email_verified',
-          eventData: {
-            companyName: companyData.name,
-            adminEmail: companyData.adminEmail,
-            trialStarted: true
-          },
-          createdAt: serverTimestamp()
-        });
-
-        // Send welcome email with credentials
-        await sendWelcomeEmail(companyData);
-
-        // Show success
-        showSuccess(companyData, trialEndDate);
-
-      } catch (error) {
-        console.error('❌ Verification error:', error);
-        showError('An error occurred during verification. Please try again or contact support.');
-      }
-    }
-
-    // Send welcome email with credentials
-    async function sendWelcomeEmail(companyData) {
-      try {
-        await addDoc(collection(db, 'mail'), {
-          to: [companyData.adminEmail],
-          message: {
-            subject: 'Welcome to SeatSnag! Your trial is active',
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h1 style="color: #667eea;">Welcome to SeatSnag, ${companyData.adminFirstName}!</h1>
-                <p>Your email has been verified and your 14-day free trial is now active!</p>
-                
-                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                  <h3>🔑 Your Admin Credentials</h3>
-                  <p><strong>Company:</strong> ${companyData.name}</p>
-                  <p><strong>Admin PIN:</strong> ${companyData.secretPin}</p>
-                  <p><strong>Admin Portal:</strong> <a href="https://seatsnag-sso-dev.web.app/admin">Access Here</a></p>
-                </div>
-                
-                <h3>🚀 Getting Started</h3>
-                <ol>
-                  <li>Set up your office locations</li>
-                  <li>Share the employee portal with your team</li>
-                  <li>Start managing seat bookings!</li>
-                </ol>
-                
-                <p style="margin-top: 30px;">
-                  <a href="https://seatsnag-sso-dev.web.app/admin" 
-                     style="background: #667eea; color: white; padding: 12px 24px; 
-                            text-decoration: none; border-radius: 8px; display: inline-block;">
-                    Set Up Your Office →
-                  </a>
-                </p>
-                
-                <p style="margin-top: 20px; color: #666;">
-                  Need help? Reply to this email or contact our support team.
-                </p>
-              </div>
-            `
-          }
-        });
-      } catch (error) {
-        console.error('Error sending welcome email:', error);
-      }
-    }
-
-    // Show success state
-    function showSuccess(companyData, trialEndDate) {
-      document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('successState').style.display = 'block';
-      
-      document.getElementById('companyName').textContent = companyData.name;
-      document.getElementById('adminPin').textContent = companyData.secretPin;
-      document.getElementById('trialExpiry').textContent = trialEndDate.toLocaleDateString();
-    }
-
-    // Show error state
-    function showError(message) {
-      document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('errorState').style.display = 'block';
-      document.getElementById('errorMessage').textContent = message;
-    }
-
-    // Retry verification
-    window.retryVerification = function() {
-      document.getElementById('errorState').style.display = 'none';
-      document.getElementById('loadingState').style.display = 'block';
-      setTimeout(verifyEmail, 1000);
-    };
-
-    // Start verification on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('🚀 Starting email verification...');
-      setTimeout(verifyEmail, 2000); // Small delay for UX
-    });
-  </script>
+  <!-- External JavaScript (module type for Firebase imports) -->
+  <script type="module" src="../js/verify.js"></script>
 </body>
 </html>

@@ -1,0 +1,539 @@
+/* ============================================
+   BOOKING.CSS - Page-specific styles only
+   Base styles are in shared.css
+   ============================================ */
+
+/* Page Layout */
+body {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: var(--radius-xl);
+  padding: 30px;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-title {
+  color: var(--neutral-800);
+  font-size: 2.2em;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.right-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-chip {
+  background: var(--neutral-100);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--neutral-500);
+  margin-bottom: 20px;
+  font-size: 1.1em;
+}
+
+.sync-status {
+  padding: 8px 16px;
+  border-radius: var(--radius-xl);
+  font-size: .9em;
+  font-weight: 600;
+  background: var(--success-green);
+  color: #fff;
+}
+
+/* User Input Styles */
+.user-input {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.user-input input[type="text"],
+.user-input select {
+  flex: 1;
+  min-width: 200px;
+}
+
+.secondary {
+  background: var(--neutral-100);
+  color: var(--neutral-800);
+}
+
+#actionBtn.done-mode {
+  background: linear-gradient(135deg, var(--success-green) 0%, var(--success-dark-green) 100%);
+}
+
+/* View Controls */
+.view-controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.view-btn {
+  padding: 8px 20px;
+  background: var(--neutral-50);
+  color: var(--neutral-800);
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.view-btn.active {
+  background: var(--primary-purple);
+  color: #fff;
+  border-color: var(--primary-purple);
+}
+
+.view-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Week Container & Day Cards */
+.week-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.day-card {
+  background: var(--neutral-50);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
+  cursor: default;
+  position: relative;
+}
+
+.day-card.selectable {
+  cursor: pointer;
+}
+
+.day-card.selectable:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--neutral-200);
+}
+
+.day-card.selected {
+  background: #e8f4ff;
+  border-color: var(--primary-purple) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, .2);
+}
+
+.selection-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-purple);
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.day-card.selected .selection-indicator {
+  display: flex;
+}
+
+.day-header {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin-bottom: 8px;
+}
+
+.date {
+  font-size: .9em;
+  color: var(--neutral-500);
+  margin-bottom: 15px;
+}
+
+.seat-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #fff;
+  border-radius: var(--radius-md);
+}
+
+.seat-icon {
+  font-size: 1.5em;
+}
+
+.seat-status {
+  font-weight: 600;
+  flex: 1;
+}
+
+/* Attendees List */
+.attendees-list {
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.day-card.has-attendees:not(.selectable) {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.day-card.has-attendees:not(.selectable):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+  background: #f0f4ff;
+  border-color: var(--primary-purple);
+}
+
+/* Modal Specific Styles */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--neutral-100);
+}
+
+.modal-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--neutral-500);
+  padding: 4px;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-800);
+}
+
+.modal-attendees {
+  display: grid;
+  gap: 12px;
+}
+
+.modal-attendee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--neutral-200);
+  transition: all var(--transition-fast);
+}
+
+.modal-attendee:hover {
+  background: #e8f4ff;
+  border-color: var(--primary-purple);
+}
+
+.attendee-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.attendee-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.attendee-details h4 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.attendee-details p {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--neutral-500);
+}
+
+.modal-remove-btn {
+  background: var(--error-red);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-remove-btn:hover {
+  background: var(--error-dark-red);
+}
+
+/* Attendee Styles */
+.attendee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #fff;
+  margin-bottom: 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.attendee:hover {
+  background: #e8f4ff;
+  transform: translateX(3px);
+}
+
+.attendee-name {
+  font-weight: 500;
+  color: var(--neutral-800);
+}
+
+.remove-btn {
+  background: var(--error-red);
+  color: #fff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: var(--error-dark-red);
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* Company Header */
+.company-header h2 {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.logged-in-header {
+  margin-bottom: 20px;
+  padding: 24px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--neutral-200);
+}
+
+.company-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.company-name {
+  font-size: 1.6em;
+  font-weight: 800;
+  color: var(--neutral-800);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.company-name::before {
+  content: "🏢";
+  font-size: 1.2em;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+/* Mode Indicator */
+.mode-indicator {
+  background: #fef3c7;
+  border: 2px solid var(--warning-orange);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.mode-indicator.active {
+  display: block;
+}
+
+/* ============================================
+   GOOGLE WORKSPACE SSO STYLES
+   ============================================ */
+
+.google-sso-section {
+  margin-bottom: 24px;
+}
+
+.google-signin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 24px;
+  background: white;
+  border: 2px solid #dadce0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.google-signin-btn:hover {
+  border-color: #4285f4;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+  background: #f8f9fa;
+}
+
+.google-signin-btn:active {
+  transform: scale(0.98);
+}
+
+.google-signin-btn img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Success message after Google sign-in */
+.google-signin-success {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #dcfce7;
+  border: 2px solid #22c55e;
+  border-radius: 12px;
+  color: #166534;
+  font-weight: 600;
+  margin-bottom: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+.google-signin-success .success-icon {
+  width: 24px;
+  height: 24px;
+  background: #22c55e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

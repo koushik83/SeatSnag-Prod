@@ -1,102 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Office Seat Tracker</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  min-height:100vh;padding:20px
-}
-.container{
-  max-width:1200px;margin:0 auto;background:#fff;border-radius:20px;padding:30px;
-  box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative
-}
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.title-wrap{display:flex;align-items:center;gap:12px}
-.app-title{color:#333;font-size:2.2em;font-weight:800;letter-spacing:.2px}
-.brand-icon{width:44px;height:44px}
-.right-tools{display:flex;align-items:center;gap:12px}
-.profile-chip{background:#f3f4f6;border-radius:999px;padding:6px 12px;font-weight:600}
-.subtitle{color:#666;margin-bottom:20px;font-size:1.1em}
-.sync-status{padding:8px 16px;border-radius:20px;font-size:.9em;font-weight:600;background:#22c55e;color:#fff}
-.user-input{margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-input[type="text"],select{
-  flex:1;min-width:200px;padding:12px 20px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;transition:border-color .3s
-}
-select:focus,input[type="text"]:focus{outline:none;border-color:#667eea}
-input[type="text"]:disabled,select:disabled{background:#f5f5f5;cursor:not-allowed;color:#444}
-button{
-  padding:12px 30px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer
-}
-.secondary{background:#efefef;color:#333}
-#actionBtn.done-mode{background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%)}
-.view-controls{margin-bottom:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.view-btn{padding:8px 20px;background:#f8f9fa;color:#333;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s}
-.view-btn.active{background:#667eea;color:#fff;border-color:#667eea}
-.view-btn:hover{transform:translateY(-1px)}
-.week-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}
-.day-card{background:#f8f9fa;border-radius:15px;padding:20px;transition:all .3s;border:2px solid transparent;cursor:default;position:relative}
-.day-card.selectable{cursor:pointer}
-.day-card.selectable:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.1);border-color:#e0e0e0}
-.day-card.selected{background:#e8f4ff;border-color:#667eea!important;transform:translateY(-3px);box-shadow:0 10px 25px rgba(102,126,234,.2)}
-.selection-indicator{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:#667eea;color:#fff;display:none;align-items:center;justify-content:center;font-size:14px}
-.day-card.selected .selection-indicator{display:flex}
-.day-header{font-size:1.2em;font-weight:700;color:#333;margin-bottom:8px}
-.date{font-size:.9em;color:#666;margin-bottom:15px}
-.seat-counter{display:flex;align-items:center;gap:8px;margin-bottom:15px;padding:10px;background:#fff;border-radius:10px}
-.seat-icon{font-size:1.5em}
-.seat-status{font-weight:600;flex:1}
-.available{color:#22c55e}.warning{color:#f59e0b}.full{color:#ef4444}
-.attendees-list{max-height:200px;overflow:hidden;position:relative}
-.day-card.has-attendees:not(.selectable){cursor:pointer;transition:all 0.3s ease}
-.day-card.has-attendees:not(.selectable):hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(102,126,234,0.2);background:#f0f4ff;border-color:#667eea}
-.day-card{position:relative}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000;animation:fadeIn 0.2s ease}
-.modal{background:#fff;border-radius:20px;padding:32px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.3);animation:slideIn 0.3s ease}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #f1f5f9}
-.modal-title{font-size:1.4em;font-weight:700;color:#1e293b;margin:0}
-.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:#64748b;padding:4px;border-radius:50%;transition:all 0.2s}
-.modal-close:hover{background:#f1f5f9;color:#1e293b}
-.modal-attendees{display:grid;gap:12px}
-.modal-attendee{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s}
-.modal-attendee:hover{background:#e8f4ff;border-color:#667eea}
-.attendee-info{display:flex;align-items:center;gap:12px}
-.attendee-avatar{width:40px;height:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:16px}
-.attendee-details h4{margin:0;font-weight:600;color:#1e293b}
-.attendee-details p{margin:0;font-size:0.9em;color:#64748b}
-.modal-remove-btn{background:#ef4444;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600}
-.modal-remove-btn:hover{background:#dc2626}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.attendee{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff;margin-bottom:8px;border-radius:8px;transition:all .2s}
-.attendee:hover{background:#e8f4ff;transform:translateX(3px)}
-.attendee-name{font-weight:500;color:#333}
-.remove-btn{background:#ef4444;color:#fff;border:none;padding:4px 10px;border-radius:5px;font-size:12px;cursor:pointer}
-.remove-btn:hover{background:#dc2626}
-.legend{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:20px;background:#f8f9fa;border-radius:10px}
-.legend-item{display:flex;align-items:center;gap:8px}
-.legend-dot{width:12px;height:12px;border-radius:50%}
-.company-header h2{font-size:1.4em;font-weight:700;color:#333;margin:0}
-.logged-in-header{margin-bottom:20px;padding:24px;background:#f8f9fa;border-radius:16px;border:2px solid #e2e8f0}
-.company-info{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.company-name{font-size:1.6em;font-weight:800;color:#1e293b;margin:0;display:flex;align-items:center;gap:8px}
-.company-name::before{content:"🏢";font-size:1.2em}
-.action-buttons{display:flex;gap:12px;align-items:center}
-.logout-btn{padding:10px 20px;font-size:14px}
-.mode-indicator{background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:15px;margin-bottom:20px;display:none}
-.mode-indicator.active{display:block}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Seat Tracker</title>
+  
+  <!-- External CSS - Fixed paths (changed from ../css/ to /css/) -->
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/booking.css">
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div class="title-wrap">
-      <!-- Inline SVG icon -->
       <svg class="brand-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
         <rect x="6" y="16" width="16" height="36" rx="3" fill="url(#g1)"/>
@@ -116,17 +32,82 @@ button{
     </div>
   </div>
 
-  <p class="subtitle" id="subtitle">Select a company to view its seat capacity and bookings.</p>
+  <p class="subtitle" id="subtitle">Enter your access code to start booking seats.</p>
 
   <div class="mode-indicator" id="modeIndicator">
     <strong>📅 Selection Mode:</strong> Click on the days you want to book. Your selections are highlighted in blue.
   </div>
 
   <div class="user-input" id="loginSection">
-    <select id="companySelect" title="Company"><option value="" disabled selected>Select company…</option></select>
-    <input type="text" id="companyPin" placeholder="Enter Company PIN">
-    <input type="text" id="userName" placeholder="Enter your name...">
-    <button onclick="toggleSelectMode()" id="actionBtn">Select Days</button>
+    <div style="max-width: 500px; margin: 0 auto; width: 100%;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
+          Enter Your Access Code
+        </h2>
+        <p style="color: #64748b; font-size: 14px;">
+          Get your access code from your office admin
+        </p>
+      </div>
+
+      <!-- Google Workspace SSO Section -->
+      <div class="google-sso-section" style="margin-bottom: 24px;">
+        <button class="google-signin-btn" id="googleSignInBtn" type="button">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 24px; height: 24px;">
+          <span>Continue with Google Workspace</span>
+        </button>
+        <p style="text-align: center; margin-top: 8px; font-size: 13px; color: #64748b;">
+          For employees using company email
+        </p>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider" style="text-align: center; margin: 24px 0; position: relative;">
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0;"></div>
+        <span style="background: white; padding: 0 16px; position: relative; color: #64748b; font-size: 14px; font-weight: 600;">OR</span>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 8px; font-size: 14px;">
+          Access Code
+        </label>
+        <input 
+          type="text" 
+          id="accessCodeInput" 
+          placeholder="e.g. ABC123"
+          maxlength="8"
+          style="width: 100%; padding: 14px 16px; font-size: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Monaco', 'Courier New', monospace; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; box-sizing: border-box;"
+          onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.1)'"
+          onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+        >
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 8px; font-size: 14px;">
+          Your Name
+        </label>
+        <input 
+          type="text" 
+          id="userName" 
+          placeholder="Enter your name"
+          style="width: 100%; padding: 14px 16px; font-size: 16px; border: 2px solid #e2e8f0; border-radius: 12px; transition: all 0.2s; box-sizing: border-box;"
+          onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.1)'"
+          onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+        >
+      </div>
+
+      <button 
+        onclick="handleLogin()" 
+        id="loginBtn"
+        style="width: 100%; padding: 16px; background: #667eea; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+        onmouseover="this.style.background='#5568d3'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(102,126,234,0.3)'"
+        onmouseout="this.style.background='#667eea'; this.style.transform='none'; this.style.boxShadow='none'"
+      >
+        Continue →
+      </button>
+
+      <div id="errorMessage" style="margin-top: 16px; padding: 12px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b; display: none; font-weight: 600; font-size: 14px;">
+      </div>
+    </div>
   </div>
 
   <div class="logged-in-header" id="loggedInSection" style="display:none;">
@@ -153,679 +134,18 @@ button{
   </div>
 </div>
 
-<!-- Modal for showing all attendees -->
 <div class="modal-overlay" id="attendeesModal" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
       <h3 class="modal-title" id="modalTitle">Attendees</h3>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
-    <div class="modal-attendees" id="modalAttendees">
-      <!-- Attendees will be populated here -->
-    </div>
+    <div class="modal-attendees" id="modalAttendees"></div>
   </div>
 </div>
 
-<!-- Firebase SDKs -->
-<script type="module">
-  // Import Firebase modules
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getFirestore, collection, getDocs, addDoc, setDoc, doc, query, where, orderBy, limit, serverTimestamp, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-  // Firebase configuration
-  const firebaseConfig = {
-  apiKey: "AIzaSyD0aKw1vkbjN02dpTP3jGRayVqS127IObs",
-  authDomain: "seatsnag-sso-dev.firebaseapp.com",
-  projectId: "seatsnag-sso-dev",
-  storageBucket: "seatsnag-sso-dev.firebasestorage.app",
-  messagingSenderId: "138133397720",
-  appId: "1:138133397720:web:9fc75b262986e1cf0677ad"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Global variables (same as before)
-  let companies = [];
-  let locations = [];
-  let currentCompany = null;
-  let currentLocation = null;
-  let bookingsData = {};
-  let selectMode = false;
-  let selectedDays = new Set();
-  let viewMode = 'week';
-
-  // ========================================
-  // Firebase Database Functions (NEW!)
-  // ========================================
-
-  // Load all companies from Firestore
-  async function loadCompaniesList() {
-    try {
-      document.getElementById('syncStatus').textContent = '🔄 Loading...';
-      
-      const companiesSnapshot = await getDocs(collection(db, 'companies'));
-      companies = [];
-      
-      for (const doc of companiesSnapshot.docs) {
-        const companyData = { id: doc.id, ...doc.data() };
-        
-        // Get locations for this company
-        const locationsQuery = query(
-          collection(db, 'locations'), 
-          where('companyId', '==', doc.id),
-          where('isActive', '==', true)
-        );
-        const locationsSnapshot = await getDocs(locationsQuery);
-        companyData.locations = locationsSnapshot.docs.map(locDoc => ({
-          id: locDoc.id,
-          ...locDoc.data()
-        }));
-        
-        companies.push(companyData);
-      }
-      
-      // Populate company dropdown
-      const sel = document.getElementById('companySelect');
-      sel.innerHTML = '<option value="" disabled>Select company…</option>' + 
-        companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      
-      sel.onchange = async () => {
-        const companyId = sel.value;
-        currentCompany = companies.find(c => c.id === companyId);
-        if (currentCompany && currentCompany.locations.length > 0) {
-          // For now, use first location (you can add location selector later)
-          currentLocation = currentCompany.locations[0];
-          await loadBookingsForLocation(currentLocation.id);
-          updateSubtitle();
-          updateUI(false);
-        }
-      };
-      
-      document.getElementById('syncStatus').textContent = '🟢 Firebase Live';
-    } catch (error) {
-      console.error('Error loading companies:', error);
-      document.getElementById('syncStatus').textContent = '❌ Error';
-    }
-  }
-
-  // Load bookings for a specific location
-  async function loadBookingsForLocation(locationId) {
-    try {
-      const bookingsQuery = query(
-        collection(db, 'bookings'),
-        where('locationId', '==', locationId),
-        where('status', '==', 'active')
-      );
-      const bookingsSnapshot = await getDocs(bookingsQuery);
-      
-      // Group bookings by date
-      bookingsData = {};
-      bookingsSnapshot.docs.forEach(doc => {
-        const booking = doc.data();
-        const date = booking.bookingDate;
-        if (!bookingsData[date]) {
-          bookingsData[date] = [];
-        }
-        bookingsData[date].push({
-          id: doc.id,
-          userName: booking.userName,
-          userId: booking.userId
-        });
-      });
-      
-    } catch (error) {
-      console.error('Error loading bookings:', error);
-    }
-  }
-
-  // Create a new booking in Firestore
-  async function createBooking(locationId, userName, bookingDate) {
-    try {
-      // Create user if doesn't exist
-      const usersQuery = query(
-        collection(db, 'users'),
-        where('companyId', '==', currentCompany.id),
-        where('name', '==', userName)
-      );
-      const usersSnapshot = await getDocs(usersQuery);
-      
-      let userId;
-      if (usersSnapshot.empty) {
-        // Create new user
-        const userRef = await addDoc(collection(db, 'users'), {
-          companyId: currentCompany.id,
-          name: userName,
-          email: null,
-          defaultLocationId: locationId,
-          isActive: true,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        });
-        userId = userRef.id;
-      } else {
-        userId = usersSnapshot.docs[0].id;
-      }
-
-      // Create booking
-      const bookingRef = await addDoc(collection(db, 'bookings'), {
-        locationId: locationId,
-        userId: userId,
-        userName: userName,
-        locationName: currentLocation.name,
-        bookingDate: bookingDate,
-        status: 'active',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
-
-      // Log analytics event
-      await addDoc(collection(db, 'analyticsEvents'), {
-        companyId: currentCompany.id,
-        locationId: locationId,
-        userId: userId,
-        eventType: 'booking_created',
-        eventData: { bookingDate },
-        createdAt: serverTimestamp()
-      });
-
-      return bookingRef.id;
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      throw error;
-    }
-  }
-
-  // Remove booking from Firestore
-  async function removeBookingFromFirestore(date, userName) {
-    try {
-      if (!bookingsData[date]) return;
-      
-      const booking = bookingsData[date].find(b => b.userName === userName);
-      if (booking) {
-        await deleteDoc(doc(db, 'bookings', booking.id));
-        
-        // Log analytics event
-        await addDoc(collection(db, 'analyticsEvents'), {
-          companyId: currentCompany.id,
-          locationId: currentLocation.id,
-          userId: booking.userId,
-          eventType: 'booking_cancelled',
-          eventData: { bookingDate: date },
-          createdAt: serverTimestamp()
-        });
-      }
-    } catch (error) {
-      console.error('Error removing booking:', error);
-      throw error;
-    }
-  }
-
-  // Get company and location by credentials
-  async function getCompanyByCredentials(companyName, locationPin) {
-    try {
-      // Find company by name
-      const company = companies.find(c => c.name === companyName);
-      if (!company) return null;
-      
-      // Find location by PIN
-      const location = company.locations.find(l => l.pin === locationPin);
-      if (!location) return null;
-      
-      return { company, location };
-    } catch (error) {
-      console.error('Error getting company credentials:', error);
-      return null;
-    }
-  }
-
-  // ========================================
-  // Original Functions (Updated for Firebase)
-  // ========================================
-
-  document.addEventListener('DOMContentLoaded', init);
-
-  async function init() {
-    renderSkeleton();
-    loadInputsFromLocal();
-    await loadCompaniesList();
-    attemptAutoLogin();
-  }
-
-  function loadInputsFromLocal() {
-    const companyName = localStorage.getItem('companyName');
-    const pin = localStorage.getItem('companyPin');
-    const user = localStorage.getItem('userName');
-    if (user) {
-      document.getElementById('userName').value = user;
-      document.getElementById('profileChip').style.display = 'block';
-      document.getElementById('profileChip').textContent = `👤 ${user}`;
-    }
-    if (pin) document.getElementById('companyPin').value = pin;
-    if (companyName) document.getElementById('companySelect').dataset.prefill = companyName;
-  }
-
-  async function attemptAutoLogin() {
-    const name = localStorage.getItem('companyName');
-    const pin = localStorage.getItem('companyPin');
-    const user = localStorage.getItem('userName');
-    if (!name || !pin || !user) return;
-
-    const company = companies.find(c => c.name === name);
-    const sel = document.getElementById('companySelect');
-    if (!company) { 
-      sel.value = ''; 
-      updateSubtitle(); 
-      return; 
-    }
-    sel.value = company.id;
-
-    const location = company.locations.find(l => l.pin === pin);
-    if (!location) { 
-      updateSubtitle(); 
-      updateUI(false); 
-      return; 
-    }
-
-    setLoggedIn(company, location, user);
-  }
-
-  async function setLoggedIn(company, location, user) {
-    currentCompany = company;
-    currentLocation = location;
-    await loadBookingsForLocation(location.id);
-    
-    // Hide login section, show logged in section
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('loggedInSection').style.display = 'block';
-    document.getElementById('companyNameDisplay').textContent = `${company.name} - ${location.name}`;
-    
-    // Update profile chip
-    const chip = document.getElementById('profileChip');
-    chip.style.display = 'block';
-    chip.textContent = `👤 ${user} @ ${location.name}`;
-    updateSubtitle();
-    updateUI(false);
-  }
-
-  function updateSubtitle() {
-    const sub = document.getElementById('subtitle');
-    if (currentLocation) {
-      const cap = currentLocation.capacity || 10;
-      const viewText = viewMode === 'week' ? 'next 8 working days' : 'next month';
-      sub.textContent = `${cap} seats available per day at ${currentLocation.name} - Showing ${viewText}`;
-    } else {
-      sub.textContent = 'Select a company to view its seat capacity and bookings.';
-    }
-  }
-
-  function setViewMode(mode) {
-    viewMode = mode;
-    
-    // Update button states
-    document.getElementById('weekBtn').classList.toggle('active', mode === 'week');
-    document.getElementById('monthBtn').classList.toggle('active', mode === 'month');
-    
-    // Update subtitle and re-render
-    updateSubtitle();
-    if (currentLocation) {
-      updateUI(selectMode);
-    } else {
-      renderSkeleton();
-    }
-  }
-
-  function renderSkeleton() {
-    const container = document.getElementById('weekContainer');
-    container.innerHTML = '';
-    const today = new Date();
-    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const maxDays = viewMode === 'week' ? 10 : 35;
-    
-    let workingDaysShown = 0;
-    const targetWorkingDays = viewMode === 'week' ? 8 : 22;
-    
-    for (let i = 0; i < maxDays && workingDaysShown < targetWorkingDays; i++) {
-      const d = new Date(today); 
-      d.setDate(today.getDate() + i);
-      if (d.getDay() === 0 || d.getDay() === 6) continue; // Skip weekends
-      
-      workingDaysShown++;
-      const div = document.createElement('div');
-      div.className = 'day-card';
-      div.innerHTML = `
-        <div class="day-header">${d.toDateString() === today.toDateString() ? 'Today' : dayNames[d.getDay()]}</div>
-        <div class="date">${monthNames[d.getMonth()]} ${d.getDate()}</div>
-        <div class="seat-counter">
-          <span class="seat-icon">ℹ️</span>
-          <span class="seat-status">Select a company to load bookings</span>
-        </div>`;
-      container.appendChild(div);
-    }
-  }
-
-  async function toggleSelectMode() {
-    const user = document.getElementById('userName').value.trim();
-    const pin = document.getElementById('companyPin').value.trim();
-    const companyId = document.getElementById('companySelect').value;
-    
-    // Check if we're in logged in state
-    const isLoggedIn = document.getElementById('loggedInSection').style.display !== 'none';
-    const btn = isLoggedIn ? document.getElementById('actionBtnLoggedIn') : document.getElementById('actionBtn');
-    const modeIndicator = document.getElementById('modeIndicator');
-
-    // Already logged in: only toggle selection mode
-    if (isLoggedIn) {
-      if (!selectMode) {
-        selectMode = true; 
-        selectedDays.clear();
-        btn.textContent = 'Done Selecting'; 
-        btn.className = 'done-mode';
-        modeIndicator.className = 'mode-indicator active'; 
-        updateUI(true);
-      } else {
-        selectMode = false; 
-        btn.textContent = 'Saving...'; 
-        btn.disabled = true;
-        
-        try {
-          await saveSelections();
-          btn.textContent = 'Select Days'; 
-          btn.className = ''; 
-          btn.disabled = false;
-          modeIndicator.className = 'mode-indicator'; 
-          selectedDays.clear();
-          await loadBookingsForLocation(currentLocation.id);
-          updateUI(false);
-        } catch (error) {
-          alert('Error saving bookings. Please try again.');
-          btn.disabled = false;
-        }
-      }
-      return;
-    }
-
-    const company = companies.find(c => c.id === companyId);
-    if (!company) return alert('Please select a valid company');
-    
-    const location = company.locations.find(l => l.pin === pin);
-    if (!location) return alert('Invalid PIN for this company');
-    if (!user) return alert('Please enter your name');
-
-    // Persist + lock
-    localStorage.setItem('companyName', company.name);
-    localStorage.setItem('companyPin', pin);
-    localStorage.setItem('userName', user);
-
-    await setLoggedIn(company, location, user);
-
-    // Enter selection mode immediately
-    selectMode = true; 
-    selectedDays.clear();
-    const loggedInBtn = document.getElementById('actionBtnLoggedIn');
-    loggedInBtn.textContent = 'Done Selecting'; 
-    loggedInBtn.className = 'done-mode';
-    modeIndicator.className = 'mode-indicator active'; 
-    updateUI(true);
-  }
-
-  async function saveSelections() {
-    const user = localStorage.getItem('userName');
-    
-    try {
-      // Remove user from all existing bookings for next 30 days
-      const today = new Date();
-      for (let i = 0; i < 30; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        const dateStr = date.toISOString().split('T')[0];
-        
-        if (bookingsData[dateStr]) {
-          const userBooking = bookingsData[dateStr].find(b => b.userName === user);
-          if (userBooking) {
-            await removeBookingFromFirestore(dateStr, user);
-          }
-        }
-      }
-      
-      // Add bookings for selected days
-      for (const dateStr of selectedDays) {
-        if (!bookingsData[dateStr]) {
-          bookingsData[dateStr] = [];
-        }
-        
-        // Check capacity
-        if (bookingsData[dateStr].length < currentLocation.capacity) {
-          await createBooking(currentLocation.id, user, dateStr);
-        }
-      }
-      
-      document.getElementById('syncStatus').textContent = '🟢 Firebase Live';
-    } catch (error) {
-      console.error('Save error', error);
-      document.getElementById('syncStatus').textContent = '❌ Save Error';
-      throw error;
-    }
-  }
-
-  function toggleDaySelection(dateStr, card) {
-    if (!selectMode) return;
-    
-    const cap = currentLocation?.capacity || 10;
-    const user = localStorage.getItem('userName');
-    
-    if (selectedDays.has(dateStr)) { 
-      selectedDays.delete(dateStr); 
-      card.classList.remove('selected'); 
-    } else {
-      if (bookingsData[dateStr] && bookingsData[dateStr].length >= cap && 
-          !bookingsData[dateStr].some(b => b.userName === user)) {
-        alert(`This day is already full! (${cap}/${cap})`); 
-        return;
-      }
-      selectedDays.add(dateStr); 
-      card.classList.add('selected');
-    }
-  }
-
-  async function removeBooking(date, name) {
-    const isLoggedIn = document.getElementById('loggedInSection').style.display !== 'none';
-    
-    if (!isLoggedIn) {
-      const enteredPin = document.getElementById('companyPin').value.trim();
-      if (!currentLocation || currentLocation.pin !== enteredPin) { 
-        alert('Enter the correct company PIN to remove a booking.'); 
-        return; 
-      }
-    }
-    
-    try {
-      await removeBookingFromFirestore(date, name);
-      await loadBookingsForLocation(currentLocation.id);
-      updateUI(selectMode);
-    } catch (error) {
-      alert('Error removing booking. Please try again.');
-    }
-  }
-
-  function updateUI(makeSelectable = false) {
-    const container = document.getElementById('weekContainer');
-    container.innerHTML = '';
-    const today = new Date();
-    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const cap = currentLocation?.capacity || 10;
-    const maxDays = viewMode === 'week' ? 10 : 35;
-    
-    let workingDaysShown = 0;
-    const targetWorkingDays = viewMode === 'week' ? 8 : 22;
-
-    for (let i = 0; i < maxDays && workingDaysShown < targetWorkingDays; i++) {
-      const d = new Date(today); 
-      d.setDate(today.getDate() + i);
-      if (d.getDay() === 0 || d.getDay() === 6) continue; // Skip weekends
-      
-      workingDaysShown++;
-      const dateStr = d.toISOString().split('T')[0];
-      const bookings = bookingsData[dateStr] || [];
-
-      let statusClass = 'available', statusEmoji = '✅';
-      if (bookings.length >= cap) { 
-        statusClass = 'full'; 
-        statusEmoji = '🚫'; 
-      } else if (bookings.length >= Math.ceil(cap * 0.7)) { 
-        statusClass = 'warning'; 
-        statusEmoji = '⚠️'; 
-      }
-
-      const isToday = d.toDateString() === today.toDateString();
-      const dayLabel = isToday ? 'Today' : dayNames[d.getDay()];
-
-      // Show max 4 attendees
-      const visibleBookings = bookings.slice(0, 4);
-      
-      const attendeesHtml = visibleBookings.map(booking => `
-        <div class="attendee">
-          <span class="attendee-name">${booking.userName}</span>
-          <button class="remove-btn" onclick="removeBooking('${dateStr}','${booking.userName}')">×</button>
-        </div>`).join('');
-
-      const div = document.createElement('div');
-      div.className = 'day-card'; 
-      if (makeSelectable) div.classList.add('selectable'); 
-      if (bookings.length > 0) div.classList.add('has-attendees');
-      div.dataset.date = dateStr;
-      div.innerHTML = `
-        <div class="selection-indicator">✓</div>
-        <div class="day-header">${dayLabel}</div>
-        <div class="date">${monthNames[d.getMonth()]} ${d.getDate()}</div>
-        <div class="seat-counter">
-          <span class="seat-icon">${statusEmoji}</span>
-          <span class="seat-status ${statusClass}">${bookings.length}/${cap} seats</span>
-        </div>
-        <div class="attendees-list">
-          ${attendeesHtml}
-        </div>`;
-
-      if (makeSelectable && bookings.some(b => b.userName === localStorage.getItem('userName'))) {
-        div.classList.add('selected'); 
-        selectedDays.add(dateStr);
-      }
-      
-      // Add click handler
-      div.onclick = (event) => {
-        if (event.target.classList.contains('remove-btn')) {
-          return; // Let remove button handle its own click
-        }
-        
-        if (selectMode) {
-          toggleDaySelection(dateStr, div);
-        } else if (bookings.length > 0) {
-          showAllAttendees(dateStr, dayLabel, `${monthNames[d.getMonth()]} ${d.getDate()}`);
-        }
-      };
-      
-      container.appendChild(div);
-    }
-  }
-
-  function showAllAttendees(dateStr, dayLabel, dateDisplay) {
-    const bookings = bookingsData[dateStr] || [];
-    const modal = document.getElementById('attendeesModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalAttendees = document.getElementById('modalAttendees');
-    
-    modalTitle.textContent = `${dayLabel} - ${dateDisplay} (${bookings.length} people)`;
-    
-    modalAttendees.innerHTML = bookings.map(booking => {
-      const initial = booking.userName.charAt(0).toUpperCase();
-      return `
-        <div class="modal-attendee">
-          <div class="attendee-info">
-            <div class="attendee-avatar">${initial}</div>
-            <div class="attendee-details">
-              <h4>${booking.userName}</h4>
-              <p>Coming to office</p>
-            </div>
-          </div>
-          <button class="modal-remove-btn" onclick="removeBookingFromModal('${dateStr}','${booking.userName}')">Remove</button>
-        </div>
-      `;
-    }).join('');
-    
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
-  }
-
-  function closeModal(event) {
-    if (event && event.target !== event.currentTarget) return;
-    const modal = document.getElementById('attendeesModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  async function removeBookingFromModal(date, name) {
-    await removeBooking(date, name);
-    // Refresh modal content
-    const bookings = bookingsData[date] || [];
-    if (bookings.length === 0) {
-      closeModal();
-    } else {
-      const modalTitle = document.getElementById('modalTitle').textContent;
-      const parts = modalTitle.split(' - ');
-      if (parts.length >= 2) {
-        const dayLabel = parts[0];
-        const datePart = parts[1].split(' (')[0];
-        showAllAttendees(date, dayLabel, datePart);
-      }
-    }
-  }
-
-  function clearProfile() {
-    localStorage.removeItem('companyName');
-    localStorage.removeItem('companyPin');
-    localStorage.removeItem('userName');
-    document.getElementById('profileChip').style.display = 'none';
-    
-    // Show login section, hide logged in section
-    document.getElementById('loginSection').style.display = 'flex';
-    document.getElementById('loggedInSection').style.display = 'none';
-    
-    // Reset state
-    selectMode = false; 
-    currentCompany = null; 
-    currentLocation = null;
-    selectedDays.clear();
-    document.getElementById('actionBtn').textContent = 'Select Days';
-    document.getElementById('actionBtn').className = '';
-    document.getElementById('modeIndicator').className = 'mode-indicator';
-    document.getElementById('userName').value = ''; 
-    document.getElementById('companyPin').value = ''; 
-    document.getElementById('companySelect').value = '';
-    updateSubtitle(); 
-    renderSkeleton();
-  }
-
-  // Make functions global for onclick handlers
-  window.toggleSelectMode = toggleSelectMode;
-  window.removeBooking = removeBooking;
-  window.removeBookingFromModal = removeBookingFromModal;
-  window.clearProfile = clearProfile;
-  window.setViewMode = setViewMode;
-  window.showAllAttendees = showAllAttendees;
-  window.closeModal = closeModal;
-  window.toggleDaySelection = toggleDaySelection;
-
-  // Auto-refresh every 30 seconds
-  setInterval(async () => { 
-    if (!selectMode && currentLocation) {
-      await loadBookingsForLocation(currentLocation.id);
-      updateUI(false);
-    }
-  }, 30000);
-
-</script>
+<!-- External JavaScript - Fixed path (changed from ../js/ to /js/) -->
+<script type="module" src="../js/booking.js"></script>
 </body>
 </html>

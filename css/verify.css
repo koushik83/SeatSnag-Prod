@@ -1,0 +1,179 @@
+/* ============================================
+   VERIFY.CSS - Page-specific styles only
+   Base styles are in shared.css
+   ============================================ */
+
+/* Page Layout */
+body {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Verify Container */
+.verify-container {
+  background: white;
+  border-radius: var(--radius-2xl);
+  padding: 48px;
+  box-shadow: var(--shadow-xl);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+/* Icon Styles */
+.verify-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--warning-orange) 0%, var(--warning-dark-orange) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+  box-shadow: 0 16px 40px rgba(245, 158, 11, 0.3);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--success-green) 0%, var(--success-dark-green) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+  box-shadow: 0 16px 40px rgba(34, 197, 94, 0.3);
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--error-red) 0%, var(--error-dark-red) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+  box-shadow: 0 16px 40px rgba(239, 68, 68, 0.3);
+}
+
+/* Text Styles */
+.verify-title {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin-bottom: 16px;
+}
+
+.verify-message {
+  color: var(--neutral-500);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-size: 1.1em;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--neutral-200);
+  border-top: 3px solid var(--primary-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success/Error States */
+.success-state {
+  display: none;
+}
+
+.error-state {
+  display: none;
+}
+
+/* Success Details */
+.success-details {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid var(--info-blue);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: #0369a1;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-value {
+  color: var(--info-dark-blue);
+  font-weight: 700;
+  font-family: 'Monaco', monospace;
+}
+
+/* Buttons */
+.access-btn {
+  padding: 16px 32px;
+  background: var(--gradient-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  display: inline-block;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-primary);
+  margin: 8px;
+}
+
+.access-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.retry-btn {
+  padding: 12px 24px;
+  background: var(--primary-purple);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  margin: 8px;
+}
