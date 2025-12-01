@@ -327,21 +327,46 @@ function focusOnAccessCode() {
       
       const { locations, company, multipleLocations } = result;
 
+      let location;
+
       // Check if multiple locations found
       if (multipleLocations) {
-        console.log('✨ Multiple locations found - showing selector');
-        loginBtn.textContent = originalBtnText;
-        loginBtn.disabled = false;
-        loginBtn.style.opacity = '1';
-        loginBtn.style.cursor = 'pointer';
+        // Check if user has a saved location preference
+        const savedLocationId = localStorage.getItem('locationId');
 
-        // Show location selector popup
-        showLocationSelector(locations, company, accessCode, userName);
-        return;
+        if (savedLocationId) {
+          // Try to find the saved location in available locations
+          location = locations.find(loc => loc.id === savedLocationId);
+
+          if (location) {
+            console.log('✅ Using previously selected location:', location.name);
+            // Continue with login using saved location
+          } else {
+            console.log('✨ Multiple locations found - showing selector');
+            loginBtn.textContent = originalBtnText;
+            loginBtn.disabled = false;
+            loginBtn.style.opacity = '1';
+            loginBtn.style.cursor = 'pointer';
+
+            // Show location selector popup
+            showLocationSelector(locations, company, accessCode, userName);
+            return;
+          }
+        } else {
+          console.log('✨ Multiple locations found - showing selector');
+          loginBtn.textContent = originalBtnText;
+          loginBtn.disabled = false;
+          loginBtn.style.opacity = '1';
+          loginBtn.style.cursor = 'pointer';
+
+          // Show location selector popup
+          showLocationSelector(locations, company, accessCode, userName);
+          return;
+        }
+      } else {
+        // Single location - proceed normally
+        location = locations[0];
       }
-
-      // Single location - proceed normally
-      const location = locations[0];
 
       if (!location.isActive) {
         errorMsg.textContent = '⚠️ This location is currently inactive. Please contact your admin.';
@@ -453,9 +478,10 @@ function focusOnAccessCode() {
           currentCompany = company;
           currentLocation = location;
 
-          // Save credentials
+          // Save credentials and selected location
           localStorage.setItem('accessCode', accessCode);
           localStorage.setItem('userName', userName);
+          localStorage.setItem('locationId', location.id);
 
           // Load bookings
           await loadBookingsForLocation(location.id);
@@ -554,14 +580,32 @@ function focusOnAccessCode() {
       
       const { locations, company, multipleLocations } = result;
 
-      if (multipleLocations) {
-        console.log('✨ Multiple locations found - showing selector for auto-login');
-        showLocationSelector(locations, company, accessCode, userName);
-        return;
-      }
+      let location;
 
-      // Single location - proceed normally
-      const location = locations[0];
+      if (multipleLocations) {
+        // Check if user has a saved location preference
+        const savedLocationId = localStorage.getItem('locationId');
+
+        if (savedLocationId) {
+          // Try to find the saved location in available locations
+          location = locations.find(loc => loc.id === savedLocationId);
+
+          if (location) {
+            console.log('✅ Using saved location:', location.name);
+          } else {
+            console.log('⚠️ Saved location not found - showing selector');
+            showLocationSelector(locations, company, accessCode, userName);
+            return;
+          }
+        } else {
+          console.log('✨ Multiple locations found - showing selector for auto-login');
+          showLocationSelector(locations, company, accessCode, userName);
+          return;
+        }
+      } else {
+        // Single location - proceed normally
+        location = locations[0];
+      }
 
       if (!location.isActive) {
         console.log('⚠️ Location is inactive');
