@@ -554,6 +554,11 @@ onAuthStateChanged(auth, async (user) => {
 
       // Show analytics dashboard
       showAnalytics();
+
+      // Initialize location form (lock access code if company has locations)
+      if (userType === 'company_admin') {
+        await initializeLocationForm();
+      }
     } catch (error) {
       console.error('❌ Error loading data:', error);
     }
@@ -1746,7 +1751,64 @@ window.logout = async function() {
     throw error;
   }
   }
-  
+
+  /**
+   * Initialize location form based on existing locations
+   * If company has locations, auto-fill and lock access code
+   * If first location, allow editing
+   */
+  async function initializeLocationForm() {
+    console.log('🔧 Initializing location form...');
+
+    // Get existing locations for this company
+    const existingLocations = locations.filter(loc => loc.companyId === currentUser.id);
+
+    const accessCodeInput = document.getElementById('locationAccessCode');
+    const generateBtn = document.querySelector('button[onclick="generateAndDisplayCode()"]');
+    const accessCodeHint = accessCodeInput?.parentElement?.querySelector('small');
+
+    if (!accessCodeInput) {
+      console.warn('Access code input not found');
+      return;
+    }
+
+    if (existingLocations.length > 0) {
+      // Company has locations → Lock access code
+      const existingCode = existingLocations[0].accessCode;
+
+      console.log('🔒 Company has existing locations. Locking code:', existingCode);
+
+      accessCodeInput.value = existingCode;
+      accessCodeInput.disabled = true;
+      accessCodeInput.style.background = '#f3f4f6';
+      accessCodeInput.style.color = '#6b7280';
+      accessCodeInput.style.cursor = 'not-allowed';
+      accessCodeInput.style.fontWeight = '700';
+
+      if (generateBtn) generateBtn.style.display = 'none';
+
+      if (accessCodeHint) {
+        accessCodeHint.innerHTML = '🔒 Using company-wide code. All locations share this code.';
+        accessCodeHint.style.color = '#16a34a';
+      }
+    } else {
+      // First location → Keep editable
+      console.log('✨ First location - access code is editable');
+
+      accessCodeInput.disabled = false;
+      accessCodeInput.style.background = '';
+      accessCodeInput.style.color = '';
+      accessCodeInput.style.cursor = 'text';
+
+      if (generateBtn) generateBtn.style.display = 'block';
+
+      if (accessCodeHint) {
+        accessCodeHint.innerHTML = '📋 Employees will use this code to access ALL your offices';
+        accessCodeHint.style.color = '#64748b';
+      }
+    }
+  }
+
 
   async function deleteCompanyById(companyId) {
     try {
@@ -2266,12 +2328,17 @@ window.logout = async function() {
     return;
   }
 
-  // Check if access code is unique
-  console.log('🔍 Checking if access code is unique:', accessCode);
-  const isUnique = await isAccessCodeUnique(accessCode);
-  if (!isUnique) {
-    showError('This access code is already in use. Please click "Generate" for a new one.', 'locationError');
-    return;
+  // Check if access code is unique (skip if field is locked - company reusing code)
+  const accessCodeInput = document.getElementById('locationAccessCode');
+  if (!accessCodeInput.disabled) {
+    console.log('🔍 Checking if access code is unique:', accessCode);
+    const isUnique = await isAccessCodeUnique(accessCode);
+    if (!isUnique) {
+      showError('This access code is already in use. Please click "Generate" for a new one.', 'locationError');
+      return;
+    }
+  } else {
+    console.log('🔒 Access code is locked - reusing company-wide code:', accessCode);
   }
 
   // Validation: Optional PIN (if provided)
@@ -2318,18 +2385,24 @@ window.logout = async function() {
     document.getElementById('locationPin').value = '';
     document.getElementById('locationCapacity').value = '';
     document.getElementById('locationMonthlyRental').value = '';
-    
+
     await loadAllData();
-    
+
+    // Re-initialize form (lock access code if this was first location)
+    await initializeLocationForm();
+
     // Show success with access code
     showSuccess(
-      `Location "${name}" created successfully! 🎉\n\nAccess Code: ${accessCode.toUpperCase()}\n\nShare this code with your employees!`, 
+      `Location "${name}" created successfully! 🎉\n\nAccess Code: ${accessCode.toUpperCase()}\n\nShare this code with your employees!`,
       'locationSuccess'
     );
     
-    // Auto-generate new code for next location
+    // Auto-generate new code ONLY if field is still editable (not locked)
     setTimeout(() => {
-      generateAndDisplayCode();
+      const accessCodeInput = document.getElementById('locationAccessCode');
+      if (accessCodeInput && !accessCodeInput.disabled) {
+        generateAndDisplayCode();
+      }
     }, 2000);
     
   } catch (error) {
