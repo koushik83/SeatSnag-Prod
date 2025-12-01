@@ -212,28 +212,37 @@ function focusOnAccessCode() {
   async function findLocationByAccessCode(accessCode) {
     try {
       console.log('🔍 Searching for access code:', accessCode.toUpperCase());
-      
+
       const accessCodeQuery = query(
         collection(db, 'locations'),
         where('accessCode', '==', accessCode.toUpperCase()),
         where('isActive', '==', true)
       );
-      
+
       const accessCodeSnapshot = await getDocs(accessCodeQuery);
-      
+
       if (!accessCodeSnapshot.empty) {
-        const locationDoc = accessCodeSnapshot.docs[0];
-        const locationData = { id: locationDoc.id, ...locationDoc.data() };
-        
-        const companyDoc = await getDoc(doc(db, 'companies', locationData.companyId));
+        // Collect all locations with this access code
+        const locations = [];
+        for (const doc of accessCodeSnapshot.docs) {
+          locations.push({ id: doc.id, ...doc.data() });
+        }
+
+        // Get company data (same for all locations)
+        const companyDoc = await getDoc(doc(db, 'companies', locations[0].companyId));
         if (!companyDoc.exists()) {
           throw new Error('Company not found');
         }
-        
+
         const companyData = { id: companyDoc.id, ...companyDoc.data() };
-        
-        console.log('✅ Found location via access code:', locationData.name);
-        return { location: locationData, company: companyData };
+
+        console.log(`✅ Found ${locations.length} location(s) via access code:`, locations.map(l => l.name).join(', '));
+
+        return {
+          locations,
+          company: companyData,
+          multipleLocations: locations.length > 1
+        };
       }
       
       console.log('⚠️ Access code not found, trying legacy PIN...');
@@ -242,22 +251,29 @@ function focusOnAccessCode() {
         where('pin', '==', accessCode),
         where('isActive', '==', true)
       );
-      
+
       const pinSnapshot = await getDocs(pinQuery);
-      
+
       if (!pinSnapshot.empty) {
-        const locationDoc = pinSnapshot.docs[0];
-        const locationData = { id: locationDoc.id, ...locationDoc.data() };
-        
-        const companyDoc = await getDoc(doc(db, 'companies', locationData.companyId));
+        // Collect all locations with this PIN (should only be one, but handle multiple)
+        const locations = [];
+        for (const doc of pinSnapshot.docs) {
+          locations.push({ id: doc.id, ...doc.data() });
+        }
+
+        const companyDoc = await getDoc(doc(db, 'companies', locations[0].companyId));
         if (!companyDoc.exists()) {
           throw new Error('Company not found');
         }
-        
+
         const companyData = { id: companyDoc.id, ...companyDoc.data() };
-        
-        console.log('✅ Found location via legacy PIN:', locationData.name);
-        return { location: locationData, company: companyData };
+
+        console.log('✅ Found location via legacy PIN:', locations[0].name);
+        return {
+          locations,
+          company: companyData,
+          multipleLocations: locations.length > 1
+        };
       }
       
       console.log('❌ No location found for code:', accessCode);
@@ -309,8 +325,24 @@ function focusOnAccessCode() {
         return;
       }
       
-      const { location, company } = result;
-      
+      const { locations, company, multipleLocations } = result;
+
+      // Check if multiple locations found
+      if (multipleLocations) {
+        console.log('✨ Multiple locations found - showing selector');
+        loginBtn.textContent = originalBtnText;
+        loginBtn.disabled = false;
+        loginBtn.style.opacity = '1';
+        loginBtn.style.cursor = 'pointer';
+
+        // Show location selector popup
+        showLocationSelector(locations, company, accessCode, userName);
+        return;
+      }
+
+      // Single location - proceed normally
+      const location = locations[0];
+
       if (!location.isActive) {
         errorMsg.textContent = '⚠️ This location is currently inactive. Please contact your admin.';
         errorMsg.style.display = 'block';
@@ -320,17 +352,17 @@ function focusOnAccessCode() {
         loginBtn.style.cursor = 'pointer';
         return;
       }
-      
+
       currentCompany = company;
       currentLocation = location;
-      
+
       localStorage.setItem('accessCode', accessCode);
       localStorage.setItem('userName', userName);
       localStorage.setItem('locationId', location.id);
       localStorage.setItem('companyId', company.id);
-      
+
       await loadBookingsForLocation(location.id);
-      
+
       document.getElementById('loginSection').style.display = 'none';
       document.getElementById('loggedInSection').style.display = 'block';
       document.getElementById('companyNameDisplay').textContent = `${company.name} - ${location.name}`;
@@ -369,6 +401,137 @@ function focusOnAccessCode() {
     }
   };
 
+  function showLocationSelector(locations, company, accessCode, userName) {
+    console.log('✨ Showing location selector for', locations.length, 'locations');
+
+    // Hide login section
+    document.getElementById('loginSection').style.display = 'none';
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'location-selector-overlay';
+    overlay.onclick = () => {
+      // Close and return to login
+      overlay.remove();
+      document.getElementById('loginSection').style.display = 'block';
+    };
+
+    // Create popup container
+    const popup = document.createElement('div');
+    popup.className = 'location-selector-popup';
+    popup.onclick = (e) => e.stopPropagation(); // Prevent closing when clicking inside
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'location-selector-header';
+    header.innerHTML = `
+      <div class="selector-title">
+        <span class="sparkle">✨</span>
+        <span>Choose Your Location</span>
+        <span class="sparkle">✨</span>
+      </div>
+      <p class="selector-subtitle">${company.name} has multiple locations</p>
+    `;
+
+    // Location cards container
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'location-cards-container';
+
+    // Create location cards
+    locations.forEach((location, index) => {
+      const card = document.createElement('div');
+      card.className = 'location-card';
+      card.onclick = async () => {
+        console.log('📍 Location selected:', location.name);
+
+        // Show loading state
+        card.classList.add('loading');
+        card.innerHTML = '<div class="card-loading">Loading...</div>';
+
+        try {
+          // Set current location and company
+          currentCompany = company;
+          currentLocation = location;
+
+          // Save credentials
+          localStorage.setItem('accessCode', accessCode);
+          localStorage.setItem('userName', userName);
+
+          // Load bookings
+          await loadBookingsForLocation(location.id);
+
+          // Remove overlay
+          overlay.remove();
+
+          // Show booking section
+          document.getElementById('loggedInSection').style.display = 'block';
+          document.getElementById('companyNameDisplay').textContent = `${company.name} - ${location.name}`;
+
+          const chip = document.getElementById('profileChip');
+          if (chip) {
+            chip.style.display = 'block';
+            chip.textContent = `👤 ${userName} @ ${location.name}`;
+          }
+
+          document.getElementById('userName').value = userName;
+          document.getElementById('accessCodeInput').value = accessCode;
+
+          updateSubtitle();
+          updateUI(false);
+
+          console.log('✅ Location selected successfully!');
+
+          // Log analytics event
+          await addDoc(collection(db, 'analyticsEvents'), {
+            companyId: company.id,
+            locationId: location.id,
+            eventType: 'employee_login',
+            eventData: {
+              userName: userName,
+              accessCode: accessCode,
+              loginMethod: 'access_code',
+              multipleLocations: true
+            },
+            createdAt: serverTimestamp()
+          });
+
+        } catch (error) {
+          console.error('Error selecting location:', error);
+          card.classList.remove('loading');
+          card.innerHTML = '<div class="card-error">❌ Error loading location. Try again.</div>';
+        }
+      };
+
+      card.innerHTML = `
+        <div class="location-card-icon">🏢</div>
+        <div class="location-card-content">
+          <h3 class="location-card-name">${location.name}</h3>
+          <p class="location-card-address">${location.address || 'Office Location'}</p>
+          <div class="location-card-capacity">
+            <span class="capacity-icon">💺</span>
+            <span class="capacity-text">${location.capacity} seats</span>
+          </div>
+        </div>
+        <div class="location-card-arrow">→</div>
+      `;
+
+      cardsContainer.appendChild(card);
+    });
+
+    // Assemble popup
+    popup.appendChild(header);
+    popup.appendChild(cardsContainer);
+    overlay.appendChild(popup);
+
+    // Add to page
+    document.body.appendChild(overlay);
+
+    // Add entrance animation
+    setTimeout(() => {
+      popup.classList.add('show');
+    }, 10);
+  }
+
   async function attemptAutoLogin() {
     const accessCode = localStorage.getItem('accessCode');
     const userName = localStorage.getItem('userName');
@@ -389,14 +552,23 @@ function focusOnAccessCode() {
         return;
       }
       
-      const { location, company } = result;
-      
+      const { locations, company, multipleLocations } = result;
+
+      if (multipleLocations) {
+        console.log('✨ Multiple locations found - showing selector for auto-login');
+        showLocationSelector(locations, company, accessCode, userName);
+        return;
+      }
+
+      // Single location - proceed normally
+      const location = locations[0];
+
       if (!location.isActive) {
         console.log('⚠️ Location is inactive');
         localStorage.clear();
         return;
       }
-      
+
       currentCompany = company;
       currentLocation = location;
       
