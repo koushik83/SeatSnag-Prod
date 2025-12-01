@@ -120,6 +120,19 @@
     </div>
   </div>
 
+  <!-- Location Switcher (shown only for multi-location users) -->
+  <div class="location-switcher-bar" id="locationSwitcherBar" style="display: none;">
+    <div class="location-switcher-content">
+      <div class="switcher-label">
+        <span class="switcher-icon">📍</span>
+        <span class="switcher-text">Current Location:</span>
+      </div>
+      <select class="location-dropdown" id="locationDropdown">
+        <option value="">Loading locations...</option>
+      </select>
+    </div>
+  </div>
+
   <div class="view-controls">
     <button class="view-btn active" id="weekBtn" onclick="setViewMode('week')">📅 Week View</button>
     <button class="view-btn" id="monthBtn" onclick="setViewMode('month')">🗓️ Month View</button>

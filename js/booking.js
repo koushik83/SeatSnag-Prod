@@ -407,14 +407,17 @@ function focusOnAccessCode() {
         companyId: company.id,
         locationId: location.id,
         eventType: 'employee_login',
-        eventData: { 
+        eventData: {
           userName: userName,
           accessCode: accessCode,
           loginMethod: location.accessCode ? 'access_code' : 'legacy_pin'
         },
         createdAt: serverTimestamp()
       });
-      
+
+      // Initialize location switcher if multiple locations
+      await initializeLocationSwitcher(accessCode);
+
     } catch (error) {
       console.error('Login error:', error);
       errorMsg.textContent = '❌ An error occurred. Please try again.';
@@ -521,6 +524,9 @@ function focusOnAccessCode() {
             createdAt: serverTimestamp()
           });
 
+          // Initialize location switcher for multi-location company
+          await initializeLocationSwitcher(accessCode);
+
         } catch (error) {
           console.error('Error selecting location:', error);
           card.classList.remove('loading');
@@ -556,6 +562,133 @@ function focusOnAccessCode() {
     setTimeout(() => {
       popup.classList.add('show');
     }, 10);
+  }
+
+  async function initializeLocationSwitcher(accessCode) {
+    console.log('🔄 Initializing location switcher...');
+
+    try {
+      // Fetch all locations for this access code
+      const result = await findLocationByAccessCode(accessCode);
+
+      if (!result || !result.multipleLocations) {
+        // Hide switcher for single location or no locations
+        document.getElementById('locationSwitcherBar').style.display = 'none';
+        return;
+      }
+
+      const { locations } = result;
+
+      // Show the switcher bar
+      const switcherBar = document.getElementById('locationSwitcherBar');
+      switcherBar.style.display = 'block';
+
+      // Populate dropdown
+      const dropdown = document.getElementById('locationDropdown');
+      dropdown.innerHTML = ''; // Clear existing options
+
+      locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location.id;
+        option.textContent = `${location.name} - ${location.address || 'Office'}`;
+
+        // Mark current location as selected
+        if (currentLocation && currentLocation.id === location.id) {
+          option.selected = true;
+        }
+
+        dropdown.appendChild(option);
+      });
+
+      // Add change event listener
+      dropdown.onchange = async (e) => {
+        await handleLocationSwitch(e.target.value, locations);
+      };
+
+      console.log('✅ Location switcher initialized with', locations.length, 'locations');
+
+    } catch (error) {
+      console.error('Error initializing location switcher:', error);
+      document.getElementById('locationSwitcherBar').style.display = 'none';
+    }
+  }
+
+  async function handleLocationSwitch(newLocationId, availableLocations) {
+    console.log('🔄 Switching to location:', newLocationId);
+
+    // Find the selected location
+    const newLocation = availableLocations.find(loc => loc.id === newLocationId);
+
+    if (!newLocation) {
+      console.error('❌ Location not found:', newLocationId);
+      return;
+    }
+
+    if (!newLocation.isActive) {
+      alert('⚠️ This location is currently inactive.');
+      // Reset dropdown to current location
+      document.getElementById('locationDropdown').value = currentLocation.id;
+      return;
+    }
+
+    try {
+      // Show loading state
+      const dropdown = document.getElementById('locationDropdown');
+      dropdown.disabled = true;
+      dropdown.style.opacity = '0.6';
+      dropdown.style.cursor = 'wait';
+
+      // Update current location
+      currentLocation = newLocation;
+
+      // Save to localStorage
+      localStorage.setItem('locationId', newLocation.id);
+
+      // Reload bookings for new location
+      await loadBookingsForLocation(newLocation.id);
+
+      // Update UI
+      document.getElementById('companyNameDisplay').textContent = `${currentCompany.name} - ${newLocation.name}`;
+
+      const chip = document.getElementById('profileChip');
+      if (chip) {
+        const userName = localStorage.getItem('userName');
+        chip.textContent = `👤 ${userName} @ ${newLocation.name}`;
+      }
+
+      updateSubtitle();
+      updateUI(false);
+
+      // Re-enable dropdown
+      dropdown.disabled = false;
+      dropdown.style.opacity = '1';
+      dropdown.style.cursor = 'pointer';
+
+      console.log('✅ Location switched successfully to:', newLocation.name);
+
+      // Log analytics event
+      await addDoc(collection(db, 'analyticsEvents'), {
+        companyId: currentCompany.id,
+        locationId: newLocation.id,
+        eventType: 'location_switch',
+        eventData: {
+          userName: localStorage.getItem('userName'),
+          fromLocationId: currentLocation.id,
+          toLocationId: newLocation.id
+        },
+        createdAt: serverTimestamp()
+      });
+
+    } catch (error) {
+      console.error('Error switching location:', error);
+      alert('❌ Failed to switch location. Please try again.');
+
+      // Reset dropdown to current location
+      document.getElementById('locationDropdown').value = currentLocation.id;
+      dropdown.disabled = false;
+      dropdown.style.opacity = '1';
+      dropdown.style.cursor = 'pointer';
+    }
   }
 
   async function attemptAutoLogin() {
@@ -635,7 +768,10 @@ function focusOnAccessCode() {
       updateUI(false);
       
       console.log('✅ Auto-login successful!');
-      
+
+      // Initialize location switcher if multiple locations
+      await initializeLocationSwitcher(accessCode);
+
     } catch (error) {
       console.error('Auto-login error:', error);
       localStorage.clear();
