@@ -57,7 +57,7 @@
 
 .logo-text {
   font-size: 1.8em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   letter-spacing: -0.02em;
 }
@@ -96,7 +96,7 @@
 }
 
 .info-value {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   font-size: 1.05em;
 }
@@ -130,7 +130,7 @@
 .section-title {
   text-align: center;
   font-size: 2.5em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   margin-bottom: 12px;
   letter-spacing: -0.02em;
@@ -195,7 +195,7 @@
   padding: 6px 20px;
   border-radius: 20px;
   font-size: 0.85em;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: var(--shadow-primary);
@@ -211,7 +211,7 @@
 
 .plan-name {
   font-size: 1.5em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -231,7 +231,7 @@
 
 .amount {
   font-size: 3em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   line-height: 1;
 }
@@ -265,7 +265,7 @@
 
 .feature-icon {
   color: var(--success-green);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.2em;
 }
 
@@ -278,7 +278,7 @@
   border: none;
   border-radius: var(--radius-md);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
@@ -324,7 +324,7 @@
 
 .checkout-card h3 {
   font-size: 1.5em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 24px;
   text-align: center;
@@ -346,7 +346,7 @@
 
 .summary-row.total {
   font-size: 1.2em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   padding-top: 16px;
   border-bottom: none;
@@ -362,7 +362,7 @@
   border: none;
   border-radius: var(--radius-md);
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
@@ -430,12 +430,12 @@
   justify-content: center;
   font-size: 40px;
   margin: 0 auto 24px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .success-message h2 {
   font-size: 2em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -454,7 +454,7 @@
   color: white;
   text-decoration: none;
   border-radius: var(--radius-md);
-  font-weight: 700;
+  font-weight: 500;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-primary);
 }
@@ -487,12 +487,12 @@
   justify-content: center;
   font-size: 40px;
   margin: 0 auto 24px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .error-message h2 {
   font-size: 2em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -509,7 +509,7 @@
   color: white;
   border: none;
   border-radius: var(--radius-md);
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-primary);

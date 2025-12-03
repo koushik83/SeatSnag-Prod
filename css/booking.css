@@ -37,7 +37,7 @@ body {
 .app-title {
   color: var(--neutral-800);
   font-size: 2.2em;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: .2px;
 }
 
@@ -185,7 +185,7 @@ body {
 
 .day-header {
   font-size: 1.2em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 8px;
 }
@@ -246,7 +246,7 @@ body {
 
 .modal-title {
   font-size: 1.4em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin: 0;
 }
@@ -396,7 +396,7 @@ body {
 /* Company Header */
 .company-header h2 {
   font-size: 1.4em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin: 0;
 }
@@ -419,7 +419,7 @@ body {
 
 .company-name {
   font-size: 1.6em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   margin: 0;
   display: flex;
@@ -523,7 +523,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 500;
   flex-shrink: 0;
 }
 
@@ -602,7 +602,7 @@ body {
 
 .selector-title {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 500;
   color: #0f172a;
   display: flex;
   align-items: center;
@@ -723,7 +723,7 @@ body {
 
 .location-card-name {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   color: #0f172a;
   margin: 0 0 4px 0;
   white-space: nowrap;
@@ -756,7 +756,7 @@ body {
 .location-card-arrow {
   font-size: 28px;
   color: #667eea;
-  font-weight: 700;
+  font-weight: 500;
   flex-shrink: 0;
   transition: transform 0.3s ease;
 }
@@ -883,7 +883,7 @@ body {
 }
 
 .switcher-text {
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.3px;
 }
 

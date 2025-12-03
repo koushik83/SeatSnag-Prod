@@ -35,7 +35,7 @@ body {
 
 .signup-title {
   font-size: 2.2em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   margin-bottom: 12px;
   letter-spacing: -0.02em;
@@ -84,7 +84,7 @@ body {
   left: 24px;
   background: #fff;
   padding: 0 12px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   font-size: 0.9em;
   text-transform: uppercase;
@@ -134,7 +134,7 @@ body {
 
 .requirement.met .req-icon {
   color: var(--success-green);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .req-icon {
@@ -231,7 +231,7 @@ body {
   padding: 20px;
   border-radius: var(--radius-lg);
   font-size: 1.1em;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-normal);
   box-shadow: var(--shadow-primary);
@@ -308,7 +308,7 @@ body {
 
 .success-title {
   font-size: 2em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -331,7 +331,7 @@ body {
 
 .success-details-title {
   font-size: 1.1em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--info-dark-blue);
   margin-bottom: 16px;
   text-align: center;
@@ -364,7 +364,7 @@ body {
 
 .detail-value {
   color: var(--info-dark-blue);
-  font-weight: 700;
+  font-weight: 500;
   font-family: 'Monaco', monospace;
 }
 

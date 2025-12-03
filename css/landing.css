@@ -188,7 +188,7 @@ body {
 }
 
 .mockup-title {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
 }
 
@@ -208,7 +208,7 @@ body {
 
 .stat-number {
   font-size: 1.5em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--primary-purple);
   margin-bottom: 4px;
 }
@@ -248,7 +248,7 @@ body {
 }
 
 .day-name {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   font-size: 1.1em;
 }
@@ -364,7 +364,7 @@ body {
 
 .section-title {
   font-size: 2.5em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--neutral-800);
   margin-bottom: 16px;
   letter-spacing: -0.02em;
@@ -415,7 +415,7 @@ body {
 
 .feature-card h3 {
   font-size: 1.4em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -484,7 +484,7 @@ body {
 
 .plan-name {
   font-size: 1.3em;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 8px;
 }
 
@@ -577,7 +577,7 @@ body {
 
 .cta-section h2 {
   font-size: 2.5em;
-  font-weight: 800;
+  font-weight: 600;
   margin-bottom: 20px;
   letter-spacing: -0.02em;
 }

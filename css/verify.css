@@ -68,7 +68,7 @@ body {
 /* Text Styles */
 .verify-title {
   font-size: 1.8em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--neutral-800);
   margin-bottom: 16px;
 }
@@ -144,7 +144,7 @@ body {
 
 .detail-value {
   color: var(--info-dark-blue);
-  font-weight: 700;
+  font-weight: 500;
   font-family: 'Monaco', monospace;
 }
 
