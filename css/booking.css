@@ -161,7 +161,7 @@ body {
   background: #e8f4ff;
   border-color: var(--primary-purple) !important;
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, .2);
+  box-shadow: 0 10px 25px rgba(79, 70, 229, .2);
 }
 
 .selection-indicator {
@@ -229,7 +229,7 @@ body {
 
 .day-card.has-attendees:not(.selectable):hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.2);
   background: #f0f4ff;
   border-color: var(--primary-purple);
 }
@@ -567,7 +567,7 @@ body {
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 0 40px rgba(102, 126, 234, 0.3);
+    0 0 40px rgba(79, 70, 229, 0.3);
   transform: translateY(-20px) scale(0.95);
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -582,7 +582,7 @@ body {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+  background: linear-gradient(45deg, #4F46E5, #4338CA, #6366F1, #4F46E5);
   background-size: 300% 300%;
   border-radius: 24px;
   z-index: -1;
@@ -663,7 +663,7 @@ body {
   height: 100%;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(102, 126, 234, 0.1) 50%,
+    rgba(79, 70, 229, 0.1) 50%,
     transparent 100%);
   transition: left 0.5s ease;
 }
@@ -674,10 +674,10 @@ body {
 
 .location-card:hover {
   transform: translateY(-4px);
-  border-color: #667eea;
+  border-color: #4F46E5;
   box-shadow:
-    0 12px 24px rgba(102, 126, 234, 0.2),
-    0 0 0 3px rgba(102, 126, 234, 0.1);
+    0 12px 24px rgba(79, 70, 229, 0.2),
+    0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .location-card:active {
@@ -692,7 +692,7 @@ body {
 
 .card-loading {
   text-align: center;
-  color: #667eea;
+  color: #4F46E5;
   font-weight: 600;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -707,13 +707,13 @@ body {
   font-size: 40px;
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .location-card-content {
@@ -755,7 +755,7 @@ body {
 
 .location-card-arrow {
   font-size: 28px;
-  color: #667eea;
+  color: #4F46E5;
   font-weight: 500;
   flex-shrink: 0;
   transition: transform 0.3s ease;
@@ -836,10 +836,10 @@ body {
    ======================================== */
 
 .location-switcher-bar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   padding: 16px 24px;
   margin: 0 -24px 24px -24px;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
   position: relative;
   overflow: hidden;
 }

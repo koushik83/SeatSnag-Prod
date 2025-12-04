@@ -28,7 +28,7 @@ body {
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background: linear-gradient(90deg, #4F46E5, #4338CA, #6366F1, #4F46E5);
   background-size: 400% 400%;
   animation: gradientShift 8s ease infinite;
 }
@@ -146,14 +146,14 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
   margin-right: 16px;
 }
 
 .upgrade-btn-header:hover {
   background: var(--primary-dark-purple);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
 .upgrade-btn-header:active {
@@ -207,7 +207,7 @@ body {
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
 }
 
 .super-admin-link {
@@ -351,12 +351,12 @@ body {
   transition: all var(--transition-normal);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
 }
 
 .add-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
 }
 
 .add-btn:active {
@@ -898,7 +898,7 @@ body {
 
 .password-toggle-btn:hover {
   color: var(--primary-purple);
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(79, 70, 229, 0.1);
 }
 
 .password-toggle-btn:focus {
@@ -1065,14 +1065,14 @@ body {
 }
 
 .period-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(79, 70, 229, 0.1);
   color: var(--primary-purple);
 }
 
 .period-btn.active {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
 /* Analytics Cards */

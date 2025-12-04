@@ -24,42 +24,42 @@ body {
    BRAND COLORS & GRADIENTS
    ============================================ */
 :root {
-  /* Primary Brand Colors */
-  --primary-purple: #667eea;
-  --primary-dark-purple: #764ba2;
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  
-  /* Accent Colors */
-  --accent-pink: #f093fb;
-  --accent-red: #f5576c;
-  --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  
-  /* Status Colors */
-  --success-green: #22c55e;
-  --success-dark-green: #16a34a;
-  --warning-orange: #f59e0b;
-  --warning-dark-orange: #d97706;
-  --error-red: #ef4444;
-  --error-dark-red: #dc2626;
-  --info-blue: #0284c7;
-  --info-dark-blue: #0c4a6e;
-  
-  /* Neutral Colors */
-  --neutral-50: #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cbd5e1;
-  --neutral-400: #94a3b8;
-  --neutral-500: #64748b;
-  --neutral-600: #475569;
-  --neutral-700: #334155;
-  --neutral-800: #1e293b;
-  --neutral-900: #0f172a;
-  
+  /* Primary Brand Colors - Professional Indigo Palette */
+  --primary-600: #4F46E5;
+  --primary-700: #4338CA;
+  --primary-900: #312E81;
+  --gradient-primary: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+
+  /* Legacy color names for backward compatibility */
+  --primary-purple: #4F46E5;
+  --primary-dark-purple: #4338CA;
+
+  /* Status Colors - More Muted and Professional */
+  --success-green: #10B981;
+  --success-dark-green: #059669;
+  --warning-orange: #F59E0B;
+  --warning-dark-orange: #D97706;
+  --error-red: #EF4444;
+  --error-dark-red: #DC2626;
+  --info-blue: #3B82F6;
+  --info-dark-blue: #1D4ED8;
+
+  /* Neutral Colors - Cooler Professional Grays */
+  --neutral-50: #F9FAFB;
+  --neutral-100: #F3F4F6;
+  --neutral-200: #E5E7EB;
+  --neutral-300: #D1D5DB;
+  --neutral-400: #9CA3AF;
+  --neutral-500: #6B7280;
+  --neutral-600: #4B5563;
+  --neutral-700: #374151;
+  --neutral-800: #1F2937;
+  --neutral-900: #111827;
+
   /* Background Colors */
-  --bg-light: #f8f9fa;
+  --bg-light: #F9FAFB;
   --bg-white: #ffffff;
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   
   /* Border Radius */
   --radius-sm: 8px;
@@ -74,7 +74,7 @@ body {
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.2);
   --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.3);
-  --shadow-primary: 0 8px 24px rgba(102, 126, 234, 0.3);
+  --shadow-primary: 0 8px 24px rgba(79, 70, 229, 0.25);
   
   /* Transitions */
   --transition-fast: 0.2s ease;
@@ -111,7 +111,7 @@ body {
 }
 
 .logo:hover .logo-icon {
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
   transform: translateY(-2px);
 }
 
@@ -161,7 +161,7 @@ body {
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background: linear-gradient(90deg, #4F46E5, #4338CA, #6366F1, #4F46E5);
   background-size: 400% 400%;
   animation: gradientShift 8s ease infinite;
   border-radius: 24px 24px 0 0;
@@ -229,7 +229,7 @@ button:disabled {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
 }
 
 .btn-primary:active {
@@ -314,7 +314,7 @@ input:focus,
 select:focus {
   outline: none;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
   transform: translateY(-1px);
 }
 
