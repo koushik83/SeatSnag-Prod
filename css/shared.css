@@ -61,20 +61,20 @@ body {
   --bg-white: #ffffff;
   --bg-gradient: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
+  /* Border Radius - Subtle Professional Values */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
   --radius-full: 999px;
-  
-  /* Shadows */
-  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.2);
-  --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.3);
-  --shadow-primary: 0 8px 24px rgba(79, 70, 229, 0.25);
+
+  /* Shadows - Layered Subtle Depth */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+  --shadow-primary: 0 1px 3px rgba(79, 70, 229, 0.2);
   
   /* Transitions */
   --transition-fast: 0.2s ease;
@@ -111,8 +111,8 @@ body {
 }
 
 .logo:hover .logo-icon {
-  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .logo-text {
@@ -191,8 +191,8 @@ button {
 }
 
 button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 button:active {
@@ -224,12 +224,13 @@ button:disabled {
 .btn-primary {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-primary:active {
@@ -248,12 +249,12 @@ button:disabled {
 .btn-success {
   background: linear-gradient(135deg, var(--success-green) 0%, var(--success-dark-green) 100%);
   color: white;
-  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-success:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(34, 197, 94, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-danger {
@@ -268,7 +269,7 @@ button:disabled {
 .btn-warning {
   background: linear-gradient(135deg, var(--warning-orange) 0%, var(--warning-dark-orange) 100%);
   color: white;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-lg {
@@ -349,15 +350,16 @@ select:disabled {
    ============================================ */
 .card {
   background: white;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--neutral-200);
   transition: all var(--transition-normal);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .container {
@@ -406,7 +408,7 @@ select:disabled {
 .badge-primary {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ============================================
@@ -499,6 +501,7 @@ select:disabled {
   overflow-y: auto;
   position: relative;
   box-shadow: var(--shadow-xl);
+  border: 1px solid var(--neutral-200);
   animation: slideIn 0.3s ease;
 }
 

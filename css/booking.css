@@ -152,7 +152,7 @@ body {
 }
 
 .day-card.selectable:hover {
-  transform: translateY(-3px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
   border-color: var(--neutral-200);
 }
@@ -160,8 +160,8 @@ body {
 .day-card.selected {
   background: #e8f4ff;
   border-color: var(--primary-purple) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(79, 70, 229, .2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .selection-indicator {
@@ -228,10 +228,9 @@ body {
 }
 
 .day-card.has-attendees:not(.selectable):hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
   background: #f0f4ff;
-  border-color: var(--primary-purple);
 }
 
 /* Modal Specific Styles */
@@ -673,15 +672,12 @@ body {
 }
 
 .location-card:hover {
-  transform: translateY(-4px);
-  border-color: #4F46E5;
-  box-shadow:
-    0 12px 24px rgba(79, 70, 229, 0.2),
-    0 0 0 3px rgba(79, 70, 229, 0.1);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .location-card:active {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .location-card.loading {
@@ -708,12 +704,12 @@ body {
   width: 64px;
   height: 64px;
   background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .location-card-content {
@@ -839,7 +835,7 @@ body {
   background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   padding: 16px 24px;
   margin: 0 -24px 24px -24px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
 }
@@ -897,12 +893,10 @@ body {
   color: #1e293b;
   background: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 0 0 0 rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -911,19 +905,15 @@ body {
 }
 
 .location-dropdown:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.15),
-    0 0 0 4px rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
 .location-dropdown:focus {
   outline: none;
-  transform: translateY(-2px);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.2),
-    0 0 0 4px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
   border-color: white;
 }
 

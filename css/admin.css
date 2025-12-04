@@ -14,9 +14,10 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   background: #fff;
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   padding: 40px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--neutral-200);
   position: relative;
   overflow: hidden;
 }
@@ -58,12 +59,12 @@ body {
   width: 60px;
   height: 60px;
   background: var(--gradient-primary);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .title-text h1 {
@@ -146,14 +147,14 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  box-shadow: var(--shadow-sm);
   margin-right: 16px;
 }
 
 .upgrade-btn-header:hover {
   background: var(--primary-dark-purple);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .upgrade-btn-header:active {
@@ -202,12 +203,12 @@ body {
   transition: all var(--transition-normal);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .super-admin-link {
@@ -239,11 +240,12 @@ body {
   padding: 24px;
   text-align: center;
   border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
@@ -351,12 +353,12 @@ body {
   transition: all var(--transition-normal);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .add-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .add-btn:active {
@@ -406,6 +408,7 @@ body {
   border-radius: var(--radius-lg);
   padding: 24px;
   border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -422,9 +425,8 @@ body {
 }
 
 .company-card:hover, .location-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-  border-color: var(--primary-purple);
 }
 
 .card-header {
@@ -580,6 +582,7 @@ body {
   border-radius: var(--radius-lg);
   padding: 24px;
   border: 2px solid var(--warning-orange);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -596,9 +599,8 @@ body {
 }
 
 .signup-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
-  border-color: var(--warning-dark-orange);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .signup-header {
@@ -855,15 +857,16 @@ body {
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 
@@ -952,6 +955,7 @@ body {
   max-width: 500px;
   width: 90%;
   box-shadow: var(--shadow-xl);
+  border: 1px solid var(--neutral-200);
   animation: slideUp 0.3s ease;
 }
 
@@ -1072,7 +1076,7 @@ body {
 .period-btn.active {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  box-shadow: var(--shadow-primary);
 }
 
 /* Analytics Cards */
@@ -1081,6 +1085,7 @@ body {
   border-radius: var(--radius-lg);
   padding: 24px;
   border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 24px;
 }
 
@@ -1177,13 +1182,13 @@ body {
   border-radius: var(--radius-md);
   padding: 16px;
   border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
 }
 
 .location-perf-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-  border-color: var(--primary-purple);
 }
 
 .location-perf-header {
