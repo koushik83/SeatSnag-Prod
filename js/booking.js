@@ -144,6 +144,9 @@ async function handleGoogleSignIn() {
         createdAt: serverTimestamp()
       });
 
+      // Initialize location switcher for SSO users (if company has multiple locations)
+      await initializeLocationSwitcherForSSO(company.id);
+
     } else {
       // Multiple locations - show location selector (bypass access code)
       console.log('✨ Multiple locations found - showing selector');
@@ -731,6 +734,9 @@ function focusOnAccessCode() {
             createdAt: serverTimestamp()
           });
 
+          // Initialize location switcher for SSO users
+          await initializeLocationSwitcherForSSO(company.id);
+
         } catch (error) {
           console.error('Error selecting SSO location:', error);
           card.classList.remove('loading');
@@ -813,6 +819,63 @@ function focusOnAccessCode() {
 
     } catch (error) {
       console.error('Error initializing location switcher:', error);
+      document.getElementById('locationSwitcherBar').style.display = 'none';
+    }
+  }
+
+  async function initializeLocationSwitcherForSSO(companyId) {
+    console.log('🔄 Initializing location switcher for SSO user...');
+
+    try {
+      // Fetch all active locations for this company
+      const locationsQuery = query(
+        collection(db, 'locations'),
+        where('companyId', '==', companyId),
+        where('isActive', '==', true)
+      );
+      const locationsSnapshot = await getDocs(locationsQuery);
+
+      const locations = locationsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      if (locations.length <= 1) {
+        // Hide switcher for single location
+        document.getElementById('locationSwitcherBar').style.display = 'none';
+        return;
+      }
+
+      // Show the switcher bar
+      const switcherBar = document.getElementById('locationSwitcherBar');
+      switcherBar.style.display = 'block';
+
+      // Populate dropdown
+      const dropdown = document.getElementById('locationDropdown');
+      dropdown.innerHTML = ''; // Clear existing options
+
+      locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location.id;
+        option.textContent = `${location.name} - ${location.address || 'Office'}`;
+
+        // Mark current location as selected
+        if (currentLocation && currentLocation.id === location.id) {
+          option.selected = true;
+        }
+
+        dropdown.appendChild(option);
+      });
+
+      // Add change event listener (reuse same handler as access code login)
+      dropdown.onchange = async (e) => {
+        await handleLocationSwitch(e.target.value, locations);
+      };
+
+      console.log('✅ SSO Location switcher initialized with', locations.length, 'locations');
+
+    } catch (error) {
+      console.error('Error initializing SSO location switcher:', error);
       document.getElementById('locationSwitcherBar').style.display = 'none';
     }
   }
