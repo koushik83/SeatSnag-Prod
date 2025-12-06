@@ -129,6 +129,81 @@ body {
 }
 
 /* ============================================
+   SEATSNAG ANIMATED LOGO
+   ============================================ */
+.seat-path-orange {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  opacity: 0;
+}
+
+.seat-path-gradient {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+
+.seat-path-glisten {
+  stroke-dasharray: 100 300;
+  stroke-dashoffset: 400;
+  opacity: 0;
+  mix-blend-mode: overlay;
+}
+
+.dot {
+  opacity: 0;
+  transform-origin: center;
+  transform: scale(0);
+}
+
+@keyframes drawStroke {
+  0% { stroke-dashoffset: 400; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes fadeToGradient {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes glistenMove {
+  0% { stroke-dashoffset: 400; opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0); }
+  60% { opacity: 1; transform: scale(1.4); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.active .seat-path-orange {
+  animation: drawStroke 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.active .seat-path-gradient {
+  animation: fadeToGradient 0.8s ease-in-out forwards;
+  animation-delay: 1.0s;
+}
+
+.active .seat-path-glisten {
+  animation: glistenMove 1.0s linear forwards;
+  animation-delay: 1.4s;
+}
+
+.active #dot1 {
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 1.2s;
+}
+
+.active #dot2 {
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 1.4s;
+}
+
+/* ============================================
    ANIMATED BACKGROUND GRID
    ============================================ */
 .animated-bg {
