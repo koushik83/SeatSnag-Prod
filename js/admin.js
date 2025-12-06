@@ -478,10 +478,22 @@ onAuthStateChanged(auth, async (user) => {
             currentUser.trialStatus = getTrialStatus(companyData);
             console.log('Company data loaded:', currentUser.name);
           } else {
-            console.error('No company document found for UID:', user.uid);
+            // User is authenticated but NOT an admin - unauthorized access attempt
+            console.error('❌ SECURITY: Unauthorized access attempt from:', user.email);
+            console.error('   User UID:', user.uid);
+            console.error('   No company document found - not an admin');
+
+            await signOut(auth);
+            alert('Access Denied: You do not have administrator privileges.\n\nThis incident has been logged.');
+            return; // Stop execution - don't show dashboard
           }
         } catch (error) {
-          console.error('Error loading company data:', error);
+          console.error('❌ Error loading company data:', error);
+
+          // On error, sign out for security
+          await signOut(auth);
+          alert('Authentication error. Please contact support if this persists.');
+          return; // Stop execution
         }
       }
 
