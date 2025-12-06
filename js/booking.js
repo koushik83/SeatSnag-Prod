@@ -72,14 +72,83 @@ async function handleGoogleSignIn() {
       photoURL: user.photoURL
     };
 
-    // Pre-fill user info
-    prefillUserInfo(googleUserInfo);
+    // Store in sessionStorage for booking records
+    sessionStorage.setItem('googleUserEmail', user.email);
+    sessionStorage.setItem('googleUserName', user.displayName);
+    sessionStorage.setItem('googleUserPhoto', user.photoURL || '');
 
-    // Show success message
-    showSuccessMessage(`Welcome ${user.displayName}! You're signed in as ${company.name} employee.`);
+    // Fetch all active locations for this company
+    console.log('🔍 Fetching locations for company:', company.name);
+    const locationsQuery = query(
+      collection(db, 'locations'),
+      where('companyId', '==', company.id),
+      where('isActive', '==', true)
+    );
+    const locationsSnapshot = await getDocs(locationsQuery);
 
-    // User still needs to enter access code for location
-    focusOnAccessCode();
+    if (locationsSnapshot.empty) {
+      throw new Error(`No active locations found for ${company.name}. Please contact your admin.`);
+    }
+
+    const locations = locationsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    console.log(`✅ Found ${locations.length} active location(s)`);
+
+    // Handle based on number of locations
+    if (locations.length === 1) {
+      // Single location - auto-login directly (bypass access code)
+      const location = locations[0];
+      console.log('✅ Single location found - auto-logging in:', location.name);
+
+      currentCompany = company;
+      currentLocation = location;
+
+      // Save credentials
+      localStorage.setItem('userName', user.displayName);
+      localStorage.setItem('locationId', location.id);
+      localStorage.setItem('companyId', company.id);
+      localStorage.setItem('googleEmail', user.email);
+
+      // Load bookings
+      await loadBookingsForLocation(location.id);
+
+      // Hide login section and show booking UI
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('loggedInSection').style.display = 'block';
+      document.getElementById('companyNameDisplay').textContent = `${company.name} - ${location.name}`;
+
+      const chip = document.getElementById('profileChip');
+      if (chip) {
+        chip.style.display = 'block';
+        chip.textContent = `👤 ${user.displayName} @ ${location.name}`;
+      }
+
+      updateSubtitle();
+      updateUI(false);
+
+      console.log('✅ Google SSO auto-login successful!');
+
+      // Log analytics
+      await addDoc(collection(db, 'analyticsEvents'), {
+        companyId: company.id,
+        locationId: location.id,
+        eventType: 'employee_login',
+        eventData: {
+          userName: user.displayName,
+          email: user.email,
+          loginMethod: 'google_sso_auto'
+        },
+        createdAt: serverTimestamp()
+      });
+
+    } else {
+      // Multiple locations - show location selector (bypass access code)
+      console.log('✨ Multiple locations found - showing selector');
+      showLocationSelectorForSSO(locations, company, user.displayName);
+    }
 
   } catch (error) {
     console.error('❌ Google Sign-In error:', error);
@@ -564,6 +633,141 @@ function focusOnAccessCode() {
     }, 10);
   }
 
+  function showLocationSelectorForSSO(locations, company, userName) {
+    console.log('✨ Showing SSO location selector for', locations.length, 'locations');
+
+    // Hide login section
+    document.getElementById('loginSection').style.display = 'none';
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'location-selector-overlay';
+    overlay.onclick = () => {
+      // Close and return to login
+      overlay.remove();
+      document.getElementById('loginSection').style.display = 'block';
+    };
+
+    // Create popup container
+    const popup = document.createElement('div');
+    popup.className = 'location-selector-popup';
+    popup.onclick = (e) => e.stopPropagation(); // Prevent closing when clicking inside
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'location-selector-header';
+    header.innerHTML = `
+      <div class="selector-title">
+        <span class="sparkle">✨</span>
+        <span>Choose Your Location</span>
+        <span class="sparkle">✨</span>
+      </div>
+      <p class="selector-subtitle">${company.name} has multiple locations</p>
+    `;
+
+    // Location cards container
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'location-cards-container';
+
+    // Create location cards
+    locations.forEach((location, index) => {
+      const card = document.createElement('div');
+      card.className = 'location-card';
+      card.onclick = async () => {
+        console.log('📍 SSO Location selected:', location.name);
+
+        // Show loading state
+        card.classList.add('loading');
+        card.innerHTML = '<div class="card-loading">Loading...</div>';
+
+        try {
+          // Set current location and company
+          currentCompany = company;
+          currentLocation = location;
+
+          // Get Google email from sessionStorage
+          const googleEmail = sessionStorage.getItem('googleUserEmail');
+
+          // Save credentials and selected location
+          localStorage.setItem('userName', userName);
+          localStorage.setItem('locationId', location.id);
+          localStorage.setItem('companyId', company.id);
+          if (googleEmail) {
+            localStorage.setItem('googleEmail', googleEmail);
+          }
+
+          // Load bookings
+          await loadBookingsForLocation(location.id);
+
+          // Remove overlay
+          overlay.remove();
+
+          // Show booking section
+          document.getElementById('loggedInSection').style.display = 'block';
+          document.getElementById('companyNameDisplay').textContent = `${company.name} - ${location.name}`;
+
+          const chip = document.getElementById('profileChip');
+          if (chip) {
+            chip.style.display = 'block';
+            chip.textContent = `👤 ${userName} @ ${location.name}`;
+          }
+
+          updateSubtitle();
+          updateUI(false);
+
+          console.log('✅ SSO Location selected successfully!');
+
+          // Log analytics event
+          await addDoc(collection(db, 'analyticsEvents'), {
+            companyId: company.id,
+            locationId: location.id,
+            eventType: 'employee_login',
+            eventData: {
+              userName: userName,
+              email: googleEmail,
+              loginMethod: 'google_sso_multi_location',
+              multipleLocations: true
+            },
+            createdAt: serverTimestamp()
+          });
+
+        } catch (error) {
+          console.error('Error selecting SSO location:', error);
+          card.classList.remove('loading');
+          card.innerHTML = '<div class="card-error">❌ Error loading location. Try again.</div>';
+        }
+      };
+
+      card.innerHTML = `
+        <div class="location-card-icon">🏢</div>
+        <div class="location-card-content">
+          <h3 class="location-card-name">${location.name}</h3>
+          <p class="location-card-address">${location.address || 'Office Location'}</p>
+          <div class="location-card-capacity">
+            <span class="capacity-icon">💺</span>
+            <span class="capacity-text">${location.capacity} seats</span>
+          </div>
+        </div>
+        <div class="location-card-arrow">→</div>
+      `;
+
+      cardsContainer.appendChild(card);
+    });
+
+    // Assemble popup
+    popup.appendChild(header);
+    popup.appendChild(cardsContainer);
+    overlay.appendChild(popup);
+
+    // Add to page
+    document.body.appendChild(overlay);
+
+    // Add entrance animation
+    setTimeout(() => {
+      popup.classList.add('show');
+    }, 10);
+  }
+
   async function initializeLocationSwitcher(accessCode) {
     console.log('🔄 Initializing location switcher...');
 
@@ -812,19 +1016,22 @@ function focusOnAccessCode() {
 
   async function createBooking(locationId, userName, bookingDate) {
     try {
+      // Get Google email if available (from SSO login)
+      const googleEmail = sessionStorage.getItem('googleUserEmail') || localStorage.getItem('googleEmail');
+
       const usersQuery = query(
         collection(db, 'users'),
         where('companyId', '==', currentCompany.id),
         where('name', '==', userName)
       );
       const usersSnapshot = await getDocs(usersQuery);
-      
+
       let userId;
       if (usersSnapshot.empty) {
         const userRef = await addDoc(collection(db, 'users'), {
           companyId: currentCompany.id,
           name: userName,
-          email: null,
+          email: googleEmail || null,
           defaultLocationId: locationId,
           isActive: true,
           createdAt: serverTimestamp(),
@@ -839,6 +1046,7 @@ function focusOnAccessCode() {
         locationId: locationId,
         userId: userId,
         userName: userName,
+        userEmail: googleEmail || null,
         locationName: currentLocation.name,
         bookingDate: bookingDate,
         status: 'active',
@@ -851,7 +1059,10 @@ function focusOnAccessCode() {
         locationId: locationId,
         userId: userId,
         eventType: 'booking_created',
-        eventData: { bookingDate },
+        eventData: {
+          bookingDate,
+          userEmail: googleEmail || null
+        },
         createdAt: serverTimestamp()
       });
 
