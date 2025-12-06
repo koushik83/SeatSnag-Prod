@@ -616,7 +616,8 @@ body {
 }
 
 .footer-brand .logo-icon {
-  background: var(--gradient-primary);
+  background: white;
+  border: 1px solid var(--primary-600);
 }
 
 .footer-description {

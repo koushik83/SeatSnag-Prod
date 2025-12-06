@@ -101,7 +101,8 @@ body {
 .logo-icon {
   width: 48px;
   height: 48px;
-  background: var(--gradient-primary);
+  background: white;
+  border: 1px solid var(--primary-600);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
